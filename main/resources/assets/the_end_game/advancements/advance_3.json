@@ -1,0 +1,53 @@
+{
+    "display": {
+        "icon": {
+            "item": "the_end_game:chestplate_the_end_game"
+        },
+        "title": {
+            "translate": "advancements.the_end_game.title.advance_3"
+        },
+        "description": {
+            "translate": "advancements.the_end_game.description.advance_3"
+        },
+		"frame": "task",
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "criteria": {
+		"advance_1": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "the_end_game:helmet_the_end_game",
+						"count": {
+							"min": 1
+						}
+					},
+					{
+						"item": "the_end_game:chestplate_the_end_game",
+						"count": {
+							"min": 1
+						}
+					},
+					{
+						"item": "the_end_game:leggings_the_end_game",
+						"count": {
+							"min": 1
+						}
+					},
+					{
+						"item": "the_end_game:boots_the_end_game",
+						"count": {
+							"min": 1
+						}
+					}
+				]
+			}
+		}
+    },
+    "rewards": {
+		"experience": 100
+	},
+	"parent": "the_end_game:advance_2"
+}

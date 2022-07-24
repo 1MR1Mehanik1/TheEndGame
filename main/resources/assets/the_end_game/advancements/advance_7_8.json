@@ -1,0 +1,42 @@
+{
+    "display": {
+        "icon": {
+            "item": "the_end_game:axe_darkness"
+        },
+        "title": {
+            "translate": "advancements.the_end_game.title.advance_7_8"
+        },
+        "description": {
+            "translate": "advancements.the_end_game.description.advance_7_8"
+        },
+		"frame": "goal",
+        "show_toast": true,
+        "announce_to_chat": true,
+		"hidden": true
+    },
+    "criteria": {
+		"advance_1": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "the_end_game:axe_darkness",
+						"count": {
+							"min": 1
+						}
+					},
+					{
+						"item": "the_end_game:sword_light",
+						"count": {
+							"min": 1
+						}
+					}
+				]
+			}
+		}
+    },
+    "rewards": {
+		"experience": 100
+	},
+	"parent": "the_end_game:advance_1"
+}

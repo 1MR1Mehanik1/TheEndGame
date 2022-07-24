@@ -1,0 +1,13 @@
+[{
+  "modid": "the_end_game",
+  "name": "The End Game",
+  "version": "1.12.2",
+  "mcversion": "${mcversion}",
+  "authorList": ["_MR_Mehanik_ & Shadow"],
+  "url": "",
+  "updateUrl": "",
+  "logoFile": "banner.png",
+  "description": "The End Game is a mod that adds content related to various items. At the moment, there are several types of armor in the mod, as well as weapons related to armor sets. Each weapon has its own unique abilities.",
+  "screenshots": [],
+  "dependencies": []
+}]

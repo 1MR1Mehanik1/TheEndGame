@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "the_end_game:items/trinkets/charm_health/charm_health",
+	"layer1": "the_end_game:items/trinkets/charm_health/health_1"
+  }
+}

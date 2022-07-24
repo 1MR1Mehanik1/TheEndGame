@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld2",
+  "textures": {
+    "layer0": "the_end_game:items/scythe/reaper_scythe_fire"
+  }
+}

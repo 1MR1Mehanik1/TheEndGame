@@ -1,0 +1,140 @@
+itemGroup.the_end_game=§4Конец Игры
+
+death.attack.void_damage=То чего нет покорило тебя.
+
+item.soul_shard.name=Осколок души
+item.crystal_darkness.name=Кристалл тьмы
+item.crystal_light.name=Kристалл света
+item.spider_foot.name=Паучья лапка
+
+item.midnight_rose.name=Полуночная роза
+title.text.blood_bar=§4Количество крови:
+title.text.mr_type_mod.1=§6§nРежим:§f§l Кинжал
+title.text.mr_type_mod.2=§6§nРежим:§f§l Рапира
+title.text.mr_type_mod.3=§6§nРежим:§f§l Меч
+title.text.mr_type_mod.4=§6§nРежим:§f§l Палаш
+
+item.midnight_rose_seed.name=Полуночное семечко
+tile.midnight_rose_plant.name=Полуночная роза
+
+item.mirfiris_fruit.name=Фрукт мирфирис
+item.mirfiris_seed.name=Семечко мирфирис
+tile.mirfiris_plant.name=Цветок мирфирис
+
+item.reaper_scythe.name=§4Коса вечности
+item.axe_darkness.name=Топор тьмы
+item.sword_light.name=Меч света
+
+item.helmet_the_end_game.name=§4Капюшон вечности
+item.chestplate_the_end_game.name=§4Роба вечности
+item.leggings_the_end_game.name=§4Шаровары вечности
+item.boots_the_end_game.name=§4Сапоги вечности
+
+item.helmet_darkness.name=Маска тьмы
+item.chestplate_darkness.name=Наплечники тьмы
+item.leggings_darkness.name=Пояс тьмы
+item.boots_darkness.name=Сапоги тьмы
+
+item.helmet_light.name=Шлем света
+item.chestplate_light.name=Нагрудник света
+item.leggings_light.name=Поножи света
+item.boots_light.name=Сапоги света
+
+item.spider_boots.name=Паучьи ботинки
+
+enchantment.void_damage=§d§nПустотное прикосновение
+enchantment.touch_abyss=§8Прикосновение бездны
+
+effect.shadow_step=Шаг тени
+potion.effect.shadow_step=Зелье шаг тени
+splash_potion.effect.shadow_step=Взрывное зелье шаг тени
+tipped_arrow.effect.shadow_step=Стрела с эффектом шаг тени
+lingering_potion.effect.shadow_step=Затяжное зелье шаг тени
+
+effect.mirfiris_potions=Мирфирис
+potion.effect.mirfiris_potions=Зелье Мирфирис
+splash_potion.effect.mirfiris_potions=Взрывное зелье Мирфирис
+tipped_arrow.effect.mirfiris_potions=Стрела с эффектом Мирфирис
+lingering_potion.effect.mirfiris_potions=Затяжное зелье Мирфирис
+
+title.text.scythe_mod=§6§nРежим оружия:
+title.scythe_mod.0=   §f§lОбычный урон
+title.scythe_mod.1=   §f§lОгненный урон
+title.scythe_mod.2=   §f§lПустотный урон
+title.scythe_mod.3=   §f§lПолучение осколков души
+
+title.text.not_working=§4НЕ РАБОТАЕТ
+title.text.spider_boots=§dПозволяют вам карабкаться по стенам.
+
+//Trinkets---------------------------------------
+name_category=Конец Игры
+text_button_name=Открыть инвентарь аксессуаров
+
+trinket.description.AMULET=§6Тип аксессуара: "Амулет"
+trinket.description.BRACER=§6Тип аксессуара: "Наручи"
+trinket.description.RING=§6Тип аксессуара: "Кольцо"
+trinket.description.CHARM_HEALTH=§6Тип аксессуара: "Стигма Здоровья"
+trinket.description.CHARM_ARMOR=§6Тип аксессуара: "Стигма Брони"
+trinket.description.NORMAL=§6Тип аксессуара: "Общий"
+
+trinket.description.AAMULET_CHARM=§6Тип аксессуара: "Амулет" "Стигма Здоровья" "Стигма Брони"
+
+item.amulet_restoration.name=Амулет Восстановления
+trinket.description.amulet_restoration=§dНеобычный амулет, используя 10 единиц опыта восстанавливает пол сердца игроку, который его носит.
+
+item.ring_flight.name=Кольцо Полета
+trinket.description.ring_flight=§dКольцо, дарующее полет позволяет носителю летать как в креативе, однако в замен поглощает опыт раз в 4 секунды и если опыта будет меньше 6 уровней вы не сможете летать.
+
+item.ring_depths.name=Кольцо Глубин
+trinket.description.ring_depths=§dЭто кольцо позволяет вам быстро плавать в воде тратя при этом 1 уровень в 9 секунд.
+
+item.ring_infernal_bowels.name=Кольцо Адских Недр
+trinket.description.ring_infernal_bowels=§dЭто кольцо позволяет вам быстро передвигаться в лаве тратя при этом 1 уровень в 9 секунд.
+
+item.ring_opposites.name=Кольцо Противоположностей
+trinket.description.ring_opposites=§dКольцо, хранящее в себе две разные силы позволит вам ускорено передвигаться, как в лаве, так и в воде тратя при этом 2 уровня в 6 секунд.
+
+item.mirror_vessel.name=Зеркальный Сосуд
+trinket.description.mirror_vessel=§dДанный мистический предмет остается на месте где умер игрок и сохраняет в себе все предметы, хранящиеся в инвентаре, однако при этом он начинает разрушаться.
+
+item.charm_armor.name=Стигма Брони
+trinket.description.charm_armor=§dДанная стигма увеличивает количество брони, за каждую стигму прибавляется по 2 защиты, так же она соединяется с обычной броней. Максимальное количество данных стигм 20.
+
+item.charm_health.name=Стигма Здоровья
+trinket.description.charm_health_1=§dДанная стигма увеличивает количество здоровья, за каждую стигму прибавляется по 2 сердца. Максимальное количество данных стигм 20.
+trinket.description.charm_health_2=§dДанная стигма увеличивает количество здоровья, за каждую стигму прибавляется по 4 сердца. Максимальное количество данных стигм 20.
+trinket.description.charm_health_3=§dДанная стигма увеличивает количество здоровья, за каждую стигму прибавляется по 6 сердца. Максимальное количество данных стигм 20.
+//---------------------------------------
+
+advancements.the_end_game.title.advance_1=Это Конец? Или только начало чего-то большего?
+advancements.the_end_game.description.advance_1=Заполучите звезду ада.
+
+advancements.the_end_game.title.advance_2=Блестяшки!!!
+advancements.the_end_game.description.advance_2=Получите осколок души, а также кристаллы тьмы и света, убив Иссушителя с помощью меча, зачарованного на "Прикосновение бездны".
+
+advancements.the_end_game.title.advance_3=Быть вечным.
+advancements.the_end_game.description.advance_3=Соберите весь комплект "Брони Вечности".
+
+advancements.the_end_game.title.advance_4=Тень - твой друг.
+advancements.the_end_game.description.advance_4=Соберите весь комплект "Брони Тьмы".
+
+advancements.the_end_game.title.advance_5=Да будет свет!
+advancements.the_end_game.description.advance_5=Соберите весь комплект "Брони Света".
+
+advancements.the_end_game.title.advance_6=Убиватор всего живого.
+advancements.the_end_game.description.advance_6=Заполучите "Косу Вечности".
+
+advancements.the_end_game.title.advance_7=Связь с тьмой.
+advancements.the_end_game.description.advance_7=Заполучите "Топор Тьмы".
+
+advancements.the_end_game.title.advance_8=Свет в глаза.
+advancements.the_end_game.description.advance_8=Заполучите "Меч Света".
+
+advancements.the_end_game.title.advance_7_8=Восход и закат.
+advancements.the_end_game.description.advance_7_8=Необходимо держать в инвентаре "Топор Тьмы" и "Меч Света".
+
+advancements.the_end_game.title.advance_9=Да здравствует владыка!!!
+advancements.the_end_game.description.advance_9=Получить предыдущие достижения.
+
+advancements.the_end_game.title.advance_10=Да прольется кровь!!!
+advancements.the_end_game.description.advance_10=Заполучите "Полуночную розу".

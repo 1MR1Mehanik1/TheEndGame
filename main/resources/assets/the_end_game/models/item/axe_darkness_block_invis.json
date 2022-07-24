@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld2_block",
+  "textures": {
+    "layer0": "the_end_game:items/axe/axe_darkness_invis"
+  }
+}

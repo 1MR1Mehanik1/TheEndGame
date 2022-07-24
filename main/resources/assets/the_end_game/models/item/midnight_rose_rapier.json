@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld4",
+  "textures": {
+    "layer0": "the_end_game:items/rose/mr_rapier"
+  }
+}

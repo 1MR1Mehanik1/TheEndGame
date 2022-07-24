@@ -1,0 +1,27 @@
+{
+  "parent": "item/handheld2",
+  "textures": {
+    "layer0": "the_end_game:items/axe/axe_darkness"
+  },
+  "overrides": [
+    {
+    "predicate": {
+      "the_end_game:blocking": 1
+    },
+    "model": "the_end_game:item/axe_darkness_block"
+    },
+	{
+	"predicate": {
+      "the_end_game:invis_axe": 1
+    },
+	"model": "the_end_game:item/axe_darkness_invis"
+	},
+	{
+	"predicate": {
+	  "the_end_game:blocking": 1,
+      "the_end_game:invis_axe": 1
+    },
+	"model": "the_end_game:item/axe_darkness_block_invis"
+	}
+  ]
+}

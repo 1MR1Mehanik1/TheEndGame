@@ -1,0 +1,77 @@
+itemGroup.the_end_game=§4End of the Game
+
+death.attack.void_damage=What is not there has conquered you.
+
+item.soul_shard.name=Shard of soul
+item.crystal_darkness.name=Crystal of darkness
+item.crystal_light.name=Crystal of light
+item.spider_foot.name=Spider's foot
+
+item.reaper_scythe.name=§4Scythe of eternity
+item.axe_darkness.name=Axe of darkness
+item.sword_light.name=Sword of light
+
+item.helmet_the_end_game.name=§4Hood of eternity
+item.chestplate_the_end_game.name=§4Robe of eternity
+item.leggings_the_end_game.name=§4Pants of eternity
+item.boots_the_end_game.name=§4Boots of eternity
+
+item.helmet_darkness.name=Mask of darkness
+item.chestplate_darkness.name=Shoulder pads of darkness
+item.leggings_darkness.name=Belt of darkness
+item.boots_darkness.name=Boots of darkness
+
+item.helmet_light.name=Helmet of light
+item.chestplate_light.name=Chestplate of light
+item.leggings_light.name=Leggings of light
+item.boots_light.name=Boots of light
+
+item.spider_boots.name=Spider boots
+
+enchantment.void_damage=§d§nVoid Touch
+enchantment.touch_abyss=§8Touch of Abyss
+
+effect.shadow_step=Shadow Step
+potion.effect.shadow_step=Potion of Shadow Step
+splash_potion.effect.shadow_step=Splash Potion of Shadow Step
+tipped_arrow.effect.shadow_step=Arrow of Shadow Step
+lingering_potion.effect.shadow_step=Lingering Potion of Shadow Step
+
+title.text.scythe_mod=§6§nWeapon mode: 
+title.scythe_mod.0=   §f§lNormal damage
+title.scythe_mod.1=   §f§lFire damage
+title.scythe_mod.2=   §f§lVoid damage
+title.scythe_mod.3=   §f§lGetting soul fragments
+
+title.text.not_working=§4NOT WORKING
+title.text.spider_boots=Allow you to climb walls.
+
+advancements.the_end_game.title.advance_1=The end or the beginning of something bigger?
+advancements.the_end_game.description.advance_1=Get the nether star.
+
+advancements.the_end_game.title.advance_2=Sparkles!!!
+advancements.the_end_game.description.advance_2=Get a shard of the soul, as well as crystals of darkness and light, by killing the Boss Wither with a sword enchanted by the "Touch of the Abyss".
+
+advancements.the_end_game.title.advance_3=To be eternal.
+advancements.the_end_game.description.advance_3=Collect the entire set of "Armor of Eternity".
+
+advancements.the_end_game.title.advance_4=The shadow is your friend.
+advancements.the_end_game.description.advance_4=Collect the entire set of "Armor of Darkness".
+
+advancements.the_end_game.title.advance_5=Let there be light!
+advancements.the_end_game.description.advance_5=Collect the entire set of "Armor of Light".
+
+advancements.the_end_game.title.advance_6=Killing all living things.
+advancements.the_end_game.description.advance_6=Get the "Scythe of Eternity".
+
+advancements.the_end_game.title.advance_7=Connection with darkness.
+advancements.the_end_game.description.advance_7=Get the "Axe of Darkness".
+
+advancements.the_end_game.title.advance_8=Light in the eyes.
+advancements.the_end_game.description.advance_8=Get the "Sword of Light".
+
+advancements.the_end_game.title.advance_7_8=Sunrise and sunset.
+advancements.the_end_game.description.advance_7_8=It is necessary to keep the "Axe of Darkness" and "Sword of Light" in the inventory.
+
+advancements.the_end_game.title.advance_9=Long live the Lord!!!
+advancements.the_end_game.description.advance_9=Get previous achievements.

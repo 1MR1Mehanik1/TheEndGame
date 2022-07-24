@@ -1,0 +1,35 @@
+{
+    "display": {
+        "icon": {
+            "item": "the_end_game:midnight_rose"
+        },
+        "title": {
+            "translate": "advancements.the_end_game.title.advance_10"
+        },
+        "description": {
+            "translate": "advancements.the_end_game.description.advance_10"
+        },
+		"frame": "challenge",
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "criteria": {
+		"advance_1": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "the_end_game:midnight_rose",
+						"count": {
+							"min": 1
+						}
+					}
+				]
+			}
+		}
+    },
+    "rewards": {
+		"experience": 500
+	},
+	"parent": "the_end_game:advance_2"
+}

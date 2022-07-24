@@ -1,0 +1,26 @@
+{
+  "parent": "item/handheld2",
+  "textures": {
+    "layer0": "the_end_game:items/scythe/reaper_scythe"
+  },
+  "overrides": [
+	{
+	"predicate": {
+      "the_end_game:fire_scythe": 1
+    },
+	"model": "the_end_game:item/reaper_scythe_fire"
+	},
+	{
+	"predicate": {
+      "the_end_game:void_scythe": 1
+    },
+	"model": "the_end_game:item/reaper_scythe_void"
+	},
+	{
+	"predicate": {
+      "the_end_game:soul_scythe": 1
+    },
+	"model": "the_end_game:item/reaper_scythe_soul"
+	}
+  ]
+}

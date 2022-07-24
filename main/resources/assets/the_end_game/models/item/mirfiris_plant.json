@@ -1,0 +1,6 @@
+{
+    "parent": "block/crop",
+    "textures": {
+        "crop": "the_end_game:blocks/mirfiris_plant_7"
+    }
+}

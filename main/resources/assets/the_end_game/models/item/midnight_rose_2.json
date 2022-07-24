@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "the_end_game:items/rose/midnight_rose",
+	"layer1": "the_end_game:items/rose/midnight_rose_2"
+  }
+}

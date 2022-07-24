@@ -1,0 +1,26 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "the_end_game:items/trinkets/charm_health/charm_health"
+  },
+  "overrides": [
+	{
+	"predicate": {
+      "the_end_game:level_1": 1
+    },
+	"model": "the_end_game:item/charm_health_level_1"
+	},
+	{
+	"predicate": {
+      "the_end_game:level_2": 1
+    },
+	"model": "the_end_game:item/charm_health_level_2"
+	},
+	{
+	"predicate": {
+      "the_end_game:level_3": 1
+    },
+	"model": "the_end_game:item/charm_health_level_3"
+	}
+  ]
+}

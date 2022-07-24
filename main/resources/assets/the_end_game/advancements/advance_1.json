@@ -1,0 +1,35 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:nether_star"
+        },
+        "title": {
+            "translate": "advancements.the_end_game.title.advance_1"
+        },
+        "description": {
+            "translate": "advancements.the_end_game.description.advance_1"
+        },
+        "background": "the_end_game:textures/othes/the_end_game.png",
+		"frame": "challenge",
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "criteria": {
+		"advance_1": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "minecraft:nether_star",
+						"count": {
+							"min": 1
+						}
+					}
+				]
+			}
+		}
+    },
+    "rewards": {
+		"experience": 100
+	}
+}
