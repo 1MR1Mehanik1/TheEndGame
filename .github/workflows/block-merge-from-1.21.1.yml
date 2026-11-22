@@ -1,0 +1,19 @@
+name: Block Merge From 1.21.1
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-source-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if source branch is 1.21.1
+        if: github.head_ref == '1.21.1'
+        run: |
+          echo "Слияние из ветки 1.21.1 запрещено."
+          exit 1
+
+      - name: Source branch is OK
+        if: github.head_ref != '1.21.1'
+        run: echo "Источник не 1.21.1, слияние разрешено."
