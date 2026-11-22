@@ -1,0 +1,20 @@
+package gcapi_model_animation.util;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.Validate;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+
+public class VectorUtils {
+    public static Vector3d fromArray(double[] array) {
+        Validate.validIndex(ArrayUtils.toObject(array), 2);
+        return new Vector3d(array[0], array[1], array[2]);
+    }
+    public static Vector3f fromArray(float[] array) {
+        Validate.validIndex(ArrayUtils.toObject(array), 2);
+        return new Vector3f(array[0], array[1], array[2]);
+    }
+    public static Vector3f convertDoubleToFloat(Vector3d v) {
+        return new Vector3f((float) v.x, (float) v.y, (float) v.z);
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "rotation=0": { "model": "the_end_game:block/table" },
+    "rotation=1": { "model": "the_end_game:block/table" },
+    "rotation=2": { "model": "the_end_game:block/table" },
+    "rotation=3": { "model": "the_end_game:block/table" },
+    "rotation=4": { "model": "the_end_game:block/table" },
+    "rotation=5": { "model": "the_end_game:block/table" },
+    "rotation=6": { "model": "the_end_game:block/table" },
+    "rotation=7": { "model": "the_end_game:block/table" }
+  }
+}

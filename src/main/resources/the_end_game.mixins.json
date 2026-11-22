@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "the_end_game.handler.vanilla_3x3.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "CraftingMenuMixin",
+    "AbstractContainerMenuMixin",
+    "SlotMixin",
+    "ResultSlotMixin",
+    "RecipeManagerMixin"
+  ],
+  "client": [
+    "AbstractContainerScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

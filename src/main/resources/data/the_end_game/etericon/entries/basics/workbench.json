@@ -1,0 +1,32 @@
+{
+  "title": { "translate": "etericon.the_end_game.entry.workbench" },
+  "tooltip": { "translate": "etericon.the_end_game.entry.workbench.tooltip" },
+  "chapter": "the_end_game:basics",
+  "shape": "star4",
+  "x": 185.0,
+  "y": 82.0,
+  "requires": [ "the_end_game:etericon" ],
+  "icon": { "item": "minecraft:crafting_table" },
+  "pages": [
+    {
+      "left": [
+        { "type": "title", "text": { "translate": "etericon.the_end_game.entry.workbench" } },
+        { "type": "text", "text": { "translate": "etericon.the_end_game.entry.workbench.text" } }
+      ],
+      "right": [
+        { "type": "image", "image": { "item": "minecraft:crafting_table", "width": 16, "height": 16 } },
+        { "type": "text", "text": { "translate": "etericon.the_end_game.entry.workbench.recipe.text" } },
+        {
+          "type": "crafting",
+          "grid": [
+            "minecraft:oak_planks", "minecraft:oak_planks", "",
+            "minecraft:oak_planks", "minecraft:oak_planks", "",
+            "", "", ""
+          ],
+          "result": "minecraft:crafting_table",
+          "caption": { "translate": "etericon.the_end_game.entry.workbench.recipe.caption" }
+        }
+      ]
+    }
+  ]
+}

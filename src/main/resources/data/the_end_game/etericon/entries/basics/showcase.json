@@ -1,0 +1,68 @@
+{
+  "title": { "translate": "etericon.the_end_game.entry.showcase" },
+  "tooltip": { "translate": "etericon.the_end_game.entry.showcase.tooltip" },
+  "chapter": "the_end_game:basics",
+  "shape": "star4",
+  "x": 150.0,
+  "y": 118.0,
+  "requires": [ "the_end_game:etericon" ],
+  "icon": { "item": "minecraft:amethyst_shard" },
+  "pages": [
+    {
+      "left": [
+        { "type": "title", "text": { "translate": "etericon.the_end_game.entry.showcase" } },
+        { "type": "text", "text": { "translate": "etericon.the_end_game.entry.showcase.intro" } },
+        {
+          "type": "image_text",
+          "image": { "item": "minecraft:book", "width": 32, "height": 32 },
+          "text": { "translate": "etericon.the_end_game.entry.showcase.image_text" },
+          "image_left": true,
+          "image_width": 42,
+          "scale": 0.58
+        }
+      ],
+      "right": [
+        {
+          "type": "container",
+          "horizontal": false,
+          "gap": 2,
+          "children": [
+            { "type": "text_title", "title": { "translate": "etericon.the_end_game.entry.showcase.container.title" }, "text": { "translate": "etericon.the_end_game.entry.showcase.container.text" }, "scale": 0.58 }
+          ]
+        },
+        {
+          "type": "recipe",
+          "recipe": "minecraft:crafting_table",
+          "grid": [
+            "minecraft:oak_planks", "minecraft:oak_planks", "",
+            "minecraft:oak_planks", "minecraft:oak_planks", "",
+            "", "", ""
+          ],
+          "result": "minecraft:crafting_table",
+          "caption": { "translate": "etericon.the_end_game.entry.showcase.recipe" }
+        }
+      ]
+    },
+    {
+      "left": [
+        { "type": "text", "text": { "translate": "etericon.the_end_game.entry.showcase.multiblock" } },
+        {
+          "type": "multiblock",
+          "id": "the_end_game:showcase_tire",
+          "layers": [
+            [ "-L-", "L0L", "-L-" ]
+          ],
+          "symbols": {
+            "L": "minecraft:lapis_block",
+            "0": "minecraft:spawner"
+          },
+          "anchor": "0"
+        }
+      ],
+      "right": [
+        { "type": "entity", "entity": "minecraft:zombie", "scale": 1.0, "rotate": true, "caption": { "translate": "etericon.the_end_game.entry.showcase.entity" } },
+        { "type": "text", "text": { "translate": "etericon.the_end_game.entry.showcase.entity.text" } }
+      ]
+    }
+  ]
+}

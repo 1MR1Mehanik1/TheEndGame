@@ -1,0 +1,10 @@
+{
+  "title": { "translate": "etericon.teg.entry.etericon" },
+  "tooltip": { "translate": "etericon.teg.entry.etericon.tooltip" },
+  "chapter": "the_end_game:primary_research",
+  "shape": "pentagon",
+  "x": 0.0,
+  "y": 0.0,
+  "icon": { "item": "minecraft:writable_book" },
+  "start_unlocked": true
+}

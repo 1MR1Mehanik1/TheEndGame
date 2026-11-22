@@ -1,0 +1,7 @@
+{
+  "left": [
+    { "type": "title", "text": { "translate": "etericon.the_end_game.page.how_to_use" } },
+    { "type": "text", "text": { "translate": "etericon.the_end_game.page.how_to_use.text1" } },
+    { "type": "text", "text": { "translate": "etericon.the_end_game.page.how_to_use.text2" } }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "title": { "translate": "etericon.teg.chapter.primary_research" },
+  "subtitle": { "translate": "etericon.teg.chapter.primary_research.subtitle" },
+  "icon": { "item": "minecraft:writable_book" },
+  "order": 0
+}

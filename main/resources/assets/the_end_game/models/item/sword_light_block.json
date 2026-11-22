@@ -1,6 +1,0 @@
-{
-  "parent": "item/handheld3_block",
-  "textures": {
-    "layer0": "the_end_game:items/sword_light"
-  }
-}

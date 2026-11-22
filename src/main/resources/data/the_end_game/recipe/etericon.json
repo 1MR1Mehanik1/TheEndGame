@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "lhl",
+    "beb",
+    "lwl"
+  ],
+  "key": {
+    "l": { "item": "minecraft:lapis_lazuli" },
+    "h": { "item": "minecraft:honeycomb" },
+    "b": { "item": "minecraft:black_dye" },
+    "e": { "item": "the_end_game:etericon_wet" },
+    "w": { "item": "minecraft:writable_book" }
+  },
+  "result": { "id": "the_end_game:etericon" },
+  "below": {
+    "blocks": "#minecraft:campfires",
+    "state": { "lit": "true" },
+    "info": { "translate": "info_crafting.etericon.below" }
+  }
+}

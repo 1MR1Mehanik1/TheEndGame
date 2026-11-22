@@ -1,0 +1,136 @@
+{
+  "title": { "translate": "etericon.the_end_game.entry.test_notes" },
+  "tooltip": { "translate": "etericon.the_end_game.entry.test_notes.tooltip" },
+  "chapter": "the_end_game:basics",
+  "shape": "star8",
+  "x": 100.0,
+  "y": 142.0,
+  "requires": [ "the_end_game:etericon" ],
+  "icon": { "item": "minecraft:writable_book" },
+  "pages": [
+    {
+      "left": [
+        { "type": "title", "text": { "translate": "etericon.the_end_game.entry.test_notes" } },
+        { "type": "text", "text": { "translate": "etericon.the_end_game.entry.test_notes.intro" } },
+        { "type": "image", "image": { "item": "minecraft:book", "width": 24, "height": 24 }, "caption": { "translate": "etericon.the_end_game.entry.test_notes.image" } },
+        {
+          "type": "image_text",
+          "image": { "item": "minecraft:amethyst_shard", "width": 32, "height": 32 },
+          "text": { "translate": "etericon.the_end_game.entry.test_notes.image_text" },
+          "image_left": true,
+          "image_width": 36,
+          "scale": 0.56
+        },
+        {
+          "type": "image_text",
+          "image": { "item": "minecraft:ender_eye", "width": 32, "height": 32 },
+          "text": { "translate": "etericon.the_end_game.entry.test_notes.image_text_right" },
+          "image_left": false,
+          "image_width": 36,
+          "scale": 0.56
+        }
+      ],
+      "right": [
+        {
+          "type": "container",
+          "horizontal": true,
+          "gap": 3,
+          "children": [
+            { "type": "item", "item": "minecraft:book", "width": 20 },
+            { "type": "text", "text": { "translate": "etericon.the_end_game.entry.test_notes.container_horizontal" }, "scale": 0.55 }
+          ]
+        },
+        {
+          "type": "container",
+          "horizontal": false,
+          "gap": 2,
+          "children": [
+            { "type": "text_title", "title": { "translate": "etericon.the_end_game.entry.test_notes.container_title" }, "text": { "translate": "etericon.the_end_game.entry.test_notes.container_text" }, "scale": 0.56 },
+            { "type": "text", "text": { "translate": "etericon.the_end_game.entry.test_notes.container_nested" }, "scale": 0.55 }
+          ]
+        },
+        { "type": "link", "text": { "translate": "etericon.the_end_game.entry.test_notes.link" }, "target": "the_end_game:how_to_use" },
+        { "type": "empty" }
+      ]
+    },
+    {
+      "left": [
+        { "type": "text_title", "title": { "translate": "etericon.the_end_game.entry.test_notes.crafting" }, "text": { "translate": "etericon.the_end_game.entry.test_notes.crafting_text" }, "scale": 0.56 },
+        {
+          "type": "crafting",
+          "grid": [
+            "minecraft:oak_planks", "minecraft:oak_planks", "",
+            "minecraft:oak_planks", "minecraft:oak_planks", "",
+            "", "", ""
+          ],
+          "result": "minecraft:crafting_table",
+          "caption": { "translate": "etericon.the_end_game.entry.test_notes.crafting_caption" }
+        },
+        {
+          "type": "recipe",
+          "recipe": "minecraft:crafting_table",
+          "grid": [
+            "minecraft:oak_planks", "minecraft:oak_planks", "",
+            "minecraft:oak_planks", "minecraft:oak_planks", "",
+            "", "", ""
+          ],
+          "result": "minecraft:crafting_table",
+          "caption": { "translate": "etericon.the_end_game.entry.test_notes.recipe_caption" }
+        }
+      ],
+      "right": [
+        {
+          "type": "recipe",
+          "recipe": "minecraft:iron_ingot_from_smelting_iron_ore",
+          "result": "minecraft:iron_ingot",
+          "caption": { "translate": "etericon.the_end_game.entry.test_notes.smelting_caption" }
+        },
+        { "type": "entity", "entity": "minecraft:zombie", "scale": 1.0, "rotate": true, "caption": { "translate": "etericon.the_end_game.entry.test_notes.entity_rotate" } },
+        { "type": "entity", "entity": "minecraft:skeleton", "scale": 1.0, "rotate": false, "caption": { "translate": "etericon.the_end_game.entry.test_notes.entity_static" } }
+      ]
+    },
+    {
+      "left": [
+        { "type": "text_title", "title": { "translate": "etericon.the_end_game.entry.test_notes.multiblock" }, "text": { "translate": "etericon.the_end_game.entry.test_notes.multiblock_text" }, "scale": 0.56 },
+        {
+          "type": "multiblock",
+          "id": "the_end_game:test_tire_1",
+          "layers": [ [ "-L-", "L0L", "-L-" ] ],
+          "symbols": {
+            "L": "minecraft:lapis_block",
+            "0": "minecraft:spawner"
+          },
+          "anchor": "0"
+        }
+      ],
+      "right": [
+        { "type": "text", "text": { "translate": "etericon.the_end_game.entry.test_notes.multiblock_multi" }, "scale": 0.55 },
+        {
+          "type": "multiblock",
+          "id": "the_end_game:test_tire_2",
+          "layers": [
+            [ "--G--", "-----", "G---G", "-----", "--G--" ],
+            [ "--N--", "-NLN-", "NL0LN", "-NLN-", "--N--" ]
+          ],
+          "symbols": {
+            "G": "minecraft:gold_block",
+            "N": "minecraft:red_nether_bricks",
+            "L": "minecraft:lapis_block",
+            "0": "minecraft:spawner"
+          },
+          "anchor": "0"
+        }
+      ]
+    },
+    {
+      "left": [
+        { "type": "title", "text": { "translate": "etericon.the_end_game.entry.test_notes.overflow" } },
+        { "type": "text", "text": { "translate": "etericon.the_end_game.entry.test_notes.overflow_text" }, "scale": 0.58 }
+      ],
+      "right": [
+        { "type": "text", "text": { "translate": "etericon.the_end_game.entry.test_notes.overflow_after" }, "scale": 0.58 },
+        { "type": "link", "text": { "translate": "etericon.the_end_game.entry.test_notes.link" }, "target": "the_end_game:how_to_use" }
+      ]
+    }
+  ]
+}

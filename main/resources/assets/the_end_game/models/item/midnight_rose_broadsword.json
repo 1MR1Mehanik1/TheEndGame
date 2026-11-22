@@ -1,6 +1,0 @@
-{
-  "parent": "item/handheld3",
-  "textures": {
-    "layer0": "the_end_game:items/rose/mr_broadsword"
-  }
-}

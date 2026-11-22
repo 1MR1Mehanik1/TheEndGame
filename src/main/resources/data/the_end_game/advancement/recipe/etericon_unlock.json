@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_any_gem_or_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": [ "the_end_game:etericon_wet" ] } ] }
+    }
+  },
+  "rewards": { "recipes": [ "the_end_game:etericon" ] }
+}
