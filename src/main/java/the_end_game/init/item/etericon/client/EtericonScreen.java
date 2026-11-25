@@ -697,13 +697,13 @@ public final class EtericonScreen extends Screen {
                 for (UnlockCondition condition : entry.stages().get(stageIndex)) { lines.add(unlockLine(condition, progress)); }
             }
         }
-        UnlockCondition.Research research = progress.findResearch(entry);
+        UnlockCondition.Research research = EntryAccess.findResearch(entry, progress, ClientEtericonData.research());
         if (state == EntryState.LOCKED && progress.requirementsMet(entry)) {
             UnlockCondition.Research requirement = researchRequirement(entry);
             if (research != null) {
                 lines.add(Component.translatable("gui.the_end_game.etericon.click_invest", research.points()).withStyle(ChatFormatting.GOLD));
             } else if (requirement != null) {
-                lines.add(Component.translatable("gui.the_end_game.etericon.research_missing", progress.researchPoints(), requirement.points()).withStyle(ChatFormatting.RED));
+                lines.add(Component.translatable("gui.the_end_game.etericon.research_missing", ClientEtericonData.research(), requirement.points()).withStyle(ChatFormatting.RED));
             }
         } else if (state == EntryState.AVAILABLE) {
             lines.add(Component.translatable("gui.the_end_game.etericon.click_read").withStyle(ChatFormatting.GREEN));
@@ -724,7 +724,7 @@ public final class EtericonScreen extends Screen {
         boolean satisfied = condition.isSatisfied(progress);
         Component prefix = Component.literal(satisfied ? "Р Р†РЎС™РІР‚Сљ " : "Р Р†РЎС™РІР‚вЂќ ").withStyle(satisfied ? ChatFormatting.GREEN : ChatFormatting.RED);
         if (condition instanceof UnlockCondition.Research research) {
-            boolean affordable = progress.researchPoints() >= research.points();
+            boolean affordable = ClientEtericonData.research() >= research.points();
             prefix = Component.literal("Р Р†РІР‚вЂќРІР‚В  ").withStyle(affordable ? ChatFormatting.GOLD : ChatFormatting.GRAY);
             Component line = Component.translatable("gui.the_end_game.etericon.unlock.research", research.points());
             return Component.empty().append(prefix).append(line.copy().withStyle(affordable ? ChatFormatting.GOLD : ChatFormatting.GRAY));

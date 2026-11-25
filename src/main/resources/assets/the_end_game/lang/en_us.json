@@ -4,5 +4,7 @@
   "gui.the_end_game.crafting.below.missing_nbt": "Missing block under the crafting table: %s (NBT)",
   "gui.the_end_game.crafting.below.missing_state_nbt": "Missing block under the crafting table: %s (state: %s, NBT)",
   "gui.the_end_game.crafting.below.any": "A special block is required under the crafting table",
-  "gui.the_end_game.crafting.below.any_state": "A special block with state %s is required under the crafting table"
+  "gui.the_end_game.crafting.below.any_state": "A special block with state %s is required under the crafting table",
+  "commands.the_end_game.playervariables.show": "Variable %s: %s",
+  "commands.the_end_game.playervariables.change": "%s: %s → %s (%s)"
 }

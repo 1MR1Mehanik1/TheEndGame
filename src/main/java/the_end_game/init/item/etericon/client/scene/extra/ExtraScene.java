@@ -61,7 +61,7 @@ public final class ExtraScene {
 
     private void drawContent(GuiGraphics graphics, int pageX, int pageY, int pageWidth, int pageHeight) {
         this.screen.drawScaledText(graphics, Component.translatable("gui.the_end_game.etericon.title"), pageX + 10, pageY + 18, 0.82F, 0xFF2A1A0E, false);
-        int points = ClientEtericonData.progress().researchPoints();
+        int points = ClientEtericonData.research();
         this.screen.drawScaledText(graphics, Component.translatable("gui.the_end_game.etericon.points", points), pageX + 10, pageY + 32, 0.5F, 0xFF5A3A1A, false);
         this.screen.drawScaledText(graphics, Component.translatable("gui.the_end_game.etericon.special.hint1"), pageX + 10, pageY + 42, 0.46F, 0xFF6A4A2A, false);
         this.screen.drawScaledText(graphics, Component.translatable("gui.the_end_game.etericon.special.hint2"), pageX + 10, pageY + 50, 0.46F, 0xFF6A4A2A, false);

@@ -29,7 +29,7 @@ public final class ClientPayloadHandler {
                 LOGGER.warn("Etericon catalog cache miss for version {}", payload.version());
             }
             JsonObject json = JsonParser.parseString(payload.progress()).getAsJsonObject();
-            ClientEtericonData.set(payload.version(), catalog, BookProgress.fromJson(json));
+            ClientEtericonData.set(payload.version(), catalog, BookProgress.fromJson(json), payload.research());
             Minecraft.getInstance().setScreen(new EtericonScreen());
         } catch (Exception exception) { LOGGER.error("Unable to open Etericon", exception); }
     }
@@ -45,7 +45,7 @@ public final class ClientPayloadHandler {
     public static void handleProgress(ProgressPayload payload) {
         try {
             BookProgress progress = BookProgress.fromJson(JsonParser.parseString(payload.progress()).getAsJsonObject());
-            ClientEtericonData.setProgress(progress);
+            ClientEtericonData.setProgress(progress, payload.research());
             Screen screen = Minecraft.getInstance().screen;
             if (screen instanceof EtericonScreen etericonScreen) { etericonScreen.onProgress(progress); }
         } catch (Exception exception) { LOGGER.error("Unable to update Etericon progress", exception); }

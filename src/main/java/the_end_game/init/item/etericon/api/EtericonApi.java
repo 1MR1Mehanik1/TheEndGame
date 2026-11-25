@@ -21,6 +21,7 @@ import the_end_game.init.item.etericon.book.EntryVisibility;
 import the_end_game.init.item.etericon.book.UnlockCondition;
 import the_end_game.init.item.etericon.book.UnlockShape;
 import the_end_game.init.item.etericon.network.EtericonNetwork;
+import the_end_game.player.PlayerVariablesApi;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,7 +54,7 @@ public final class EtericonApi {
         return progress.stateOf(entry);
     }
 
-    public static void addResearchPoints(ServerPlayer player, int amount) { mutate(player, progress -> progress.addResearchPoints(amount)); }
+    public static void addResearchPoints(ServerPlayer player, int amount) { mutate(player, progress -> PlayerVariablesApi.addResearch(player, amount)); }
 
     public static void completeTheory(ServerPlayer player, ResourceLocation theory) { mutate(player, progress -> progress.completeTheory(theory)); }
 

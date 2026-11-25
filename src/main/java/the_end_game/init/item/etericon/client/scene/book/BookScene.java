@@ -113,7 +113,7 @@ public final class BookScene {
         int buttonX = pageX + PAGE_WIDTH - 13;
         int buttonY = 167;
         boolean hovered = this.screen.isInside(this.screen.sceneMouseX(), this.screen.sceneMouseY(), buttonX, buttonY, 13, 13);
-        boolean available = EntryAccess.stageUnlocked(current, progress) && progress.researchPoints() >= cost;
+        boolean available = EntryAccess.stageUnlocked(current, progress) && ClientEtericonData.research() >= cost;
         if (!available) { RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.4F); }
         EtericonAtlas.drawEye(graphics, buttonX + 1, buttonY + 3, hovered);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -123,8 +123,8 @@ public final class BookScene {
             if (!EntryAccess.stageUnlocked(current, progress)) {
                 lines.add(Component.translatable("gui.the_end_game.etericon.stage.blocked"));
             }
-            if (progress.researchPoints() < cost) {
-                lines.add(Component.translatable("gui.the_end_game.etericon.stage.missing", progress.researchPoints(), cost));
+            if (ClientEtericonData.research() < cost) {
+                lines.add(Component.translatable("gui.the_end_game.etericon.stage.missing", ClientEtericonData.research(), cost));
             }
             this.screen.setHoveredButtonTooltip(lines);
         }

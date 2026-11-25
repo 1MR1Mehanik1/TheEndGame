@@ -75,12 +75,20 @@ public final class EntryAccess {
         return entry.stages().get(index);
     }
 
-    public static boolean canPayStage(BookEntry entry, BookProgress progress) {
+    public static UnlockCondition.Research findResearch(BookEntry entry, BookProgress progress, int research) {
+        if (!requirementsMet(entry, progress)) { return null; }
+        for (UnlockCondition condition : entry.unlocks()) {
+            if (condition instanceof UnlockCondition.Research cost && research >= cost.points()) { return cost; }
+        }
+        return null;
+    }
+
+    public static boolean canPayStage(BookEntry entry, BookProgress progress, int research) {
         List<UnlockCondition> stage = currentStage(entry, progress);
         if (stage.isEmpty()) { return false; }
         int cost = researchCost(stage);
         if (cost <= 0) { return false; }
-        return stageUnlocked(stage, progress) && progress.researchPoints() >= cost;
+        return stageUnlocked(stage, progress) && research >= cost;
     }
 
     public static int chapterTotal(BookChapter chapter, BookCatalog catalog) {

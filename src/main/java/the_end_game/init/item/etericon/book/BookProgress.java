@@ -24,7 +24,6 @@ public final class BookProgress {
     public static final Codec<BookProgress> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.optionalFieldOf("version", CURRENT_VERSION).forGetter(BookProgress::version),
             Codec.unboundedMap(ResourceLocation.CODEC, EntryState.CODEC).optionalFieldOf("states", Map.of()).forGetter(BookProgress::states),
-            Codec.INT.optionalFieldOf("points", 0).forGetter(BookProgress::researchPoints),
             Codec.list(ResourceLocation.CODEC).optionalFieldOf("theories", List.of()).forGetter(progress -> new ArrayList<>(progress.theories)),
             Codec.list(ResourceLocation.CODEC).optionalFieldOf("crafted", List.of()).forGetter(progress -> new ArrayList<>(progress.crafted)),
             Codec.list(ResourceLocation.CODEC).optionalFieldOf("studied", List.of()).forGetter(progress -> new ArrayList<>(progress.studied)),
@@ -35,7 +34,6 @@ public final class BookProgress {
 
     private final int version;
     private final Map<ResourceLocation, EntryState> states;
-    private int researchPoints;
     private final Set<ResourceLocation> theories;
     private final Set<ResourceLocation> crafted;
     private final Set<ResourceLocation> studied;
@@ -43,36 +41,33 @@ public final class BookProgress {
     private final Map<ResourceLocation, Integer> stages;
     private final Set<ResourceLocation> forgotten;
 
-    public BookProgress() { this(CURRENT_VERSION, Map.of(), 0, List.of(), List.of(), List.of(), Map.of(), Map.of(), List.of()); }
+    public BookProgress() { this(CURRENT_VERSION, Map.of(), List.of(), List.of(), List.of(), Map.of(), Map.of(), List.of()); }
 
     public BookProgress(
             Map<ResourceLocation, EntryState> states,
-            int researchPoints,
             List<ResourceLocation> theories,
             List<ResourceLocation> crafted,
             List<ResourceLocation> studied,
             Map<ResourceLocation, Integer> kills
     ) {
-        this(CURRENT_VERSION, states, researchPoints, theories, crafted, studied, kills, Map.of(), List.of());
+        this(CURRENT_VERSION, states, theories, crafted, studied, kills, Map.of(), List.of());
     }
 
     public BookProgress(
             int version,
             Map<ResourceLocation, EntryState> states,
-            int researchPoints,
             List<ResourceLocation> theories,
             List<ResourceLocation> crafted,
             List<ResourceLocation> studied,
             Map<ResourceLocation, Integer> kills,
             List<ResourceLocation> forgotten
     ) {
-        this(version, states, researchPoints, theories, crafted, studied, kills, Map.of(), forgotten);
+        this(version, states, theories, crafted, studied, kills, Map.of(), forgotten);
     }
 
     public BookProgress(
             int version,
             Map<ResourceLocation, EntryState> states,
-            int researchPoints,
             List<ResourceLocation> theories,
             List<ResourceLocation> crafted,
             List<ResourceLocation> studied,
@@ -83,7 +78,6 @@ public final class BookProgress {
         this.version = CURRENT_VERSION;
         if (version > CURRENT_VERSION) { LOGGER.warn("Etericon progress version {} is newer than {}", version, CURRENT_VERSION); }
         this.states = new HashMap<>(states);
-        this.researchPoints = Math.max(0, researchPoints);
         this.theories = new LinkedHashSet<>(theories);
         this.crafted = new LinkedHashSet<>(crafted);
         this.studied = new LinkedHashSet<>(studied);
@@ -95,8 +89,6 @@ public final class BookProgress {
     public int version() { return this.version; }
 
     public Map<ResourceLocation, EntryState> states() { return Collections.unmodifiableMap(this.states); }
-
-    public int researchPoints() { return this.researchPoints; }
 
     public Set<ResourceLocation> completedTheories() { return Collections.unmodifiableSet(this.theories); }
 
@@ -115,13 +107,6 @@ public final class BookProgress {
     public void setStage(ResourceLocation id, int stage) { this.stages.put(id, Math.max(0, stage)); }
 
     public void advanceStage(ResourceLocation id) { this.stages.merge(id, 1, Integer::sum); }
-
-    public boolean spendResearchPoints(int amount) {
-        if (amount <= 0) { return true; }
-        if (this.researchPoints < amount) { return false; }
-        this.researchPoints -= amount;
-        return true;
-    }
 
     public Set<ResourceLocation> forgotten() { return Collections.unmodifiableSet(this.forgotten); }
 
@@ -148,8 +133,6 @@ public final class BookProgress {
         this.stages.remove(id);
     }
 
-    public void addResearchPoints(int amount) { if (amount > 0) { this.researchPoints += amount; } }
-
     public void completeTheory(ResourceLocation theory) { this.theories.add(theory); }
 
     public void markCrafted(ResourceLocation item) { this.crafted.add(item); }
@@ -164,23 +147,6 @@ public final class BookProgress {
     }
 
     public boolean requirementsMet(BookEntry entry) { return EntryAccess.requirementsMet(entry, this); }
-
-    public UnlockCondition.Research findResearch(BookEntry entry) {
-        if (!this.requirementsMet(entry)) { return null; }
-        for (UnlockCondition condition : entry.unlocks()) {
-            if (condition instanceof UnlockCondition.Research research && this.researchPoints >= research.points()) { return research; }
-        }
-        return null;
-    }
-
-    public boolean spendResearch(BookEntry entry) {
-        UnlockCondition.Research research = this.findResearch(entry);
-        if (research == null) { return false; }
-        this.researchPoints -= research.points();
-        this.forgotten.remove(entry.id());
-        this.states.put(entry.id(), EntryState.OPENED);
-        return true;
-    }
 
     public void recalculate(BookCatalog catalog) {
         for (BookEntry entry : catalog.entries().values()) {
@@ -224,7 +190,6 @@ public final class BookProgress {
         JsonObject statesJson = new JsonObject();
         for (Map.Entry<ResourceLocation, EntryState> entry : this.states.entrySet()) { statesJson.addProperty(entry.getKey().toString(), entry.getValue().getSerializedName()); }
         json.add("states", statesJson);
-        json.addProperty("points", this.researchPoints);
         json.add("theories", writeSet(this.theories));
         json.add("crafted", writeSet(this.crafted));
         json.add("studied", writeSet(this.studied));
@@ -252,7 +217,6 @@ public final class BookProgress {
                 if (id != null) { states.put(id, EntryState.byName(entry.getValue().getAsString())); }
             }
         }
-        int points = json.has("points") ? json.get("points").getAsInt() : 0;
         List<ResourceLocation> theories = readSet(json, "theories");
         List<ResourceLocation> crafted = readSet(json, "crafted");
         List<ResourceLocation> studied = readSet(json, "studied");
@@ -272,7 +236,7 @@ public final class BookProgress {
                 if (id != null) { stages.put(id, Math.max(0, entry.getValue().getAsInt())); }
             }
         }
-        return new BookProgress(version, states, points, theories, crafted, studied, kills, stages, forgotten);
+        return new BookProgress(version, states, theories, crafted, studied, kills, stages, forgotten);
     }
 
     private static List<ResourceLocation> readSet(JsonObject json, String key) {

@@ -134,6 +134,8 @@
   "commands.the_end_game.etericon.mark": "Цель %s изучена игроком %s",
   "commands.the_end_game.etericon.validate.ok": "Данные Etericon корректны",
   "commands.the_end_game.etericon.validate.summary": "Проверка Etericon: ошибок %s, предупреждений %s",
+  "commands.the_end_game.playervariables.show": "Переменная %s: %s",
+  "commands.the_end_game.playervariables.change": "%s: %s → %s (%s)",
 
 
   "etericon.teg.chapter.primary_research": "Первичные исследования",

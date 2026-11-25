@@ -27,6 +27,7 @@ import the_end_game.init.item.etericon.book.EntryAccess;
 import the_end_game.init.item.etericon.book.EntryState;
 import the_end_game.init.item.etericon.book.UnlockCondition;
 import the_end_game.init.item.etericon.client.ClientPayloadHandler;
+import the_end_game.player.PlayerVariablesApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +80,7 @@ public final class EtericonNetwork {
         String cached = SENT_VERSIONS.get(player.getUUID());
         String catalogJson = version.equals(cached) ? "" : BookJson.catalogToJson(catalog);
         if (!catalogJson.isEmpty()) { SENT_VERSIONS.put(player.getUUID(), version); }
-        PacketDistributor.sendToPlayer(player, new OpenBookPayload(version, catalogJson, progress.toJson().toString()));
+        PacketDistributor.sendToPlayer(player, new OpenBookPayload(version, catalogJson, progress.toJson().toString(), PlayerVariablesApi.get(player).research()));
     }
 
     public static void broadcastCatalog() {
@@ -121,7 +122,7 @@ public final class EtericonNetwork {
 
     public static void sync(ServerPlayer player) {
         BookProgress progress = EtericonApi.getProgress(player);
-        PacketDistributor.sendToPlayer(player, new ProgressPayload(progress.toJson().toString()));
+        PacketDistributor.sendToPlayer(player, new ProgressPayload(progress.toJson().toString(), PlayerVariablesApi.get(player).research()));
     }
 
     private static void handleClick(ClickEntryPayload payload, IPayloadContext context) {
@@ -134,7 +135,10 @@ public final class EtericonNetwork {
         if (entry.hasStages()) { sync(player); }
         EntryState state = progress.stateOf(entry);
         if (state == EntryState.LOCKED) {
-            if (progress.spendResearch(entry)) {
+            UnlockCondition.Research research = EntryAccess.findResearch(entry, progress, PlayerVariablesApi.get(player).research());
+            if (research != null) {
+                PlayerVariablesApi.addResearch(player, -research.points());
+                progress.restore(entry.id());
                 progress.recalculate(catalog);
                 player.setData(EtericonAttachments.PROGRESS, progress);
                 sendOpenEntry(player, entry, EntryState.OPENED);
@@ -165,12 +169,13 @@ public final class EtericonNetwork {
         progress.recalculate(catalog);
         if (progress.stateOf(entry) != EntryState.AVAILABLE) { return; }
         if (entry.hasStages()) {
-            if (!EntryAccess.canPayStage(entry, progress)) {
+            int research = PlayerVariablesApi.get(player).research();
+            if (!EntryAccess.canPayStage(entry, progress, research)) {
                 player.playNotifySound(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, 0.8F, 1.0F);
                 return;
             }
             int cost = EntryAccess.researchCost(EntryAccess.currentStage(entry, progress));
-            if (!progress.spendResearchPoints(cost)) { return; }
+            PlayerVariablesApi.addResearch(player, -cost);
             progress.advanceStage(entry.id());
             progress.recalculate(catalog);
             player.setData(EtericonAttachments.PROGRESS, progress);

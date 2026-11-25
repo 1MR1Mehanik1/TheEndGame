@@ -16,6 +16,7 @@ public class Main {
         InitCreativeTabs.register(modBus);
         InitItem.register(modBus);
         InitEtericon.register(modBus);
+        InitPlayerVariables.register(modBus);
         InitBlock.register(modBus);
 
         Vanilla3x3Events.register(modBus);

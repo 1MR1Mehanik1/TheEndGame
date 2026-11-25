@@ -7,6 +7,7 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import the_end_game.player.PlayerVariables;
 
 import java.util.List;
 import java.util.Map;
@@ -27,10 +28,9 @@ public final class BookProgressSelfTest {
     private static final ResourceLocation SECOND = ResourceLocation.fromNamespaceAndPath("test", "second");
 
     public static void main(String[] args) {
-        BookProgress progress = new BookProgress(BookProgress.CURRENT_VERSION, Map.of(ENTRY, EntryState.LOCKED), 7, List.of(THEORY), List.of(ITEM), List.of(TARGET), Map.of(ENTITY, 3), List.of(ENTRY));
+        BookProgress progress = new BookProgress(BookProgress.CURRENT_VERSION, Map.of(ENTRY, EntryState.LOCKED), List.of(THEORY), List.of(ITEM), List.of(TARGET), Map.of(ENTITY, 3), List.of(ENTRY));
         BookProgress jsonRestored = BookProgress.fromJson(progress.toJson());
         check(jsonRestored.version() == BookProgress.CURRENT_VERSION, "json version");
-        check(jsonRestored.researchPoints() == 7, "json points");
         check(jsonRestored.isForgotten(ENTRY), "json forgotten");
         check(jsonRestored.completedTheories().contains(THEORY), "json theories");
         check(jsonRestored.craftedItems().contains(ITEM), "json crafted");
@@ -41,7 +41,6 @@ public final class BookProgressSelfTest {
         BookProgress codecRestored = BookProgress.CODEC.parse(JsonOps.INSTANCE, encoded).getOrThrow();
         check(codecRestored.version() == BookProgress.CURRENT_VERSION, "codec version");
         check(codecRestored.isForgotten(ENTRY), "codec forgotten");
-        check(codecRestored.researchPoints() == 7, "codec points");
 
         BookProgress state = new BookProgress();
         state.forget(ENTRY);
@@ -71,13 +70,13 @@ public final class BookProgressSelfTest {
         BookEntry requiresEntry = new BookEntry(REQUIRES, CHAPTER, Component.literal("Requires"), Component.empty(), UnlockShape.CIRCLE, 40.0F, 40.0F, List.of(OTHER), List.of(), true, EntryVisibility.UNTIL_REQUIREMENTS, icon, List.of(), List.of(), List.of());
         BookProgress emptyProgress = new BookProgress();
         check(!hiddenEntry.isVisible(emptyProgress), "hidden before opened");
-        BookProgress openedProgress = new BookProgress(Map.of(HIDDEN, EntryState.OPENED), 0, List.of(), List.of(), List.of(), Map.of());
+        BookProgress openedProgress = new BookProgress(Map.of(HIDDEN, EntryState.OPENED), List.of(), List.of(), List.of(), Map.of());
         check(hiddenEntry.isVisible(openedProgress), "hidden after opened");
-        BookProgress requiresProgress = new BookProgress(Map.of(OTHER, EntryState.OPENED), 0, List.of(), List.of(), List.of(), Map.of());
+        BookProgress requiresProgress = new BookProgress(Map.of(OTHER, EntryState.OPENED), List.of(), List.of(), List.of(), Map.of());
         check(requiresEntry.isVisible(requiresProgress), "requires visibility");
 
         BookChapter conditionalChapter = new BookChapter(CHAPTER, Component.literal("Conditional"), Component.empty(), icon, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, null, null, null, false, List.of(new UnlockCondition.Craft(ITEM)));
-        BookProgress craftedProgress = new BookProgress(Map.of(), 0, List.of(), List.of(ITEM), List.of(), Map.of());
+        BookProgress craftedProgress = new BookProgress(Map.of(), List.of(), List.of(ITEM), List.of(), Map.of());
         check(conditionalChapter.isUnlocked(catalog, craftedProgress), "chapter condition");
 
         BookChapter entryChapter = new BookChapter(CHAPTER, Component.literal("Entry"), Component.empty(), icon, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, null, null, null, false, List.of());
@@ -108,11 +107,11 @@ public final class BookProgressSelfTest {
                 List.of(List.of(new UnlockCondition.Research(5))), List.of());
         BookCatalog paidCatalog = new BookCatalog(Map.of(CHAPTER, chapter), Map.of(PAID, paid), Map.of());
         BookProgress paidProgress = new BookProgress();
-        paidProgress.addResearchPoints(5);
         paidProgress.recalculate(paidCatalog);
+        int research = 5;
         check(paidProgress.stateOf(paid) == EntryState.AVAILABLE, "research stage waits");
-        check(EntryAccess.canPayStage(paid, paidProgress), "research stage payable");
-        check(paidProgress.spendResearchPoints(5), "research points spent");
+        check(EntryAccess.canPayStage(paid, paidProgress, research), "research stage payable");
+        check(!EntryAccess.canPayStage(paid, paidProgress, research - 1), "research stage short");
         paidProgress.advanceStage(paid.id());
         paidProgress.recalculate(paidCatalog);
         check(paidProgress.stateOf(paid) == EntryState.OPENED, "research stage completed");
@@ -121,14 +120,14 @@ public final class BookProgressSelfTest {
                 List.of(), List.of(), true, EntryVisibility.HIDDEN_UNTIL, icon, List.of(), List.of(), List.of(), List.of(),
                 List.of(new UnlockCondition.Craft(ITEM)));
         check(!hiddenUntilEntry.isVisible(new BookProgress()), "hidden before trigger");
-        check(hiddenUntilEntry.isVisible(new BookProgress(Map.of(), 0, List.of(), List.of(ITEM), List.of(), Map.of())), "hidden after trigger");
+        check(hiddenUntilEntry.isVisible(new BookProgress(Map.of(), List.of(), List.of(ITEM), List.of(), Map.of())), "hidden after trigger");
 
         BookEntry first = new BookEntry(FIRST, CHAPTER, Component.literal("First"), Component.empty(), UnlockShape.CIRCLE, 80.0F, 80.0F,
                 List.of(), List.of(), true, EntryVisibility.ALWAYS, icon, List.of(), List.of(), List.of());
         BookEntry second = new BookEntry(SECOND, CHAPTER, Component.literal("Second"), Component.empty(), UnlockShape.CIRCLE, 90.0F, 90.0F,
                 List.of(), List.of(), true, EntryVisibility.ALWAYS, icon, List.of(), List.of(), List.of());
         BookCatalog percentCatalog = new BookCatalog(Map.of(CHAPTER, chapter), Map.of(FIRST, first, SECOND, second), Map.of());
-        BookProgress percentProgress = new BookProgress(Map.of(FIRST, EntryState.OPENED), 0, List.of(), List.of(), List.of(), Map.of());
+        BookProgress percentProgress = new BookProgress(Map.of(FIRST, EntryState.OPENED), List.of(), List.of(), List.of(), Map.of());
         check(EntryAccess.chapterPercent(chapter, percentCatalog, percentProgress) == 50, "chapter percent");
 
         JsonObject stagedJson = JsonParser.parseString("{\"chapter\":\"test:chapter\",\"title\":\"Staged\",\"start_unlocked\":true,\"icon\":{\"atlas\":\"test:textures/test.png\",\"w\":16,\"h\":16,\"width\":16,\"height\":16},\"stages\":[{\"conditions\":[{\"type\":\"craft\",\"item\":\"test:item\"}]},{\"conditions\":[{\"type\":\"kill\",\"entity\":\"test:entity\",\"count\":2}]}]}").getAsJsonObject();
@@ -144,6 +143,15 @@ public final class BookProgressSelfTest {
         stageJsonProgress.setStage(STAGED, 1);
         BookProgress stageJsonRestored = BookProgress.fromJson(stageJsonProgress.toJson());
         check(stageJsonRestored.stageOf(STAGED) == 1, "stage progress json");
+
+        PlayerVariables variables = new PlayerVariables(12, 34, 56);
+        JsonElement variablesJson = PlayerVariables.CODEC.encodeStart(JsonOps.INSTANCE, variables).getOrThrow();
+        PlayerVariables variablesRestored = PlayerVariables.CODEC.parse(JsonOps.INSTANCE, variablesJson).getOrThrow();
+        check(variablesRestored.research() == 12, "player research");
+        check(variablesRestored.mind() == 34, "player mind");
+        check(variablesRestored.frenzy() == 56, "player frenzy");
+        PlayerVariables defaults = new PlayerVariables();
+        check(defaults.research() == 0 && defaults.mind() == 100 && defaults.frenzy() == 0, "player defaults");
 
         System.out.println("Etericon progress self-test passed");
     }
