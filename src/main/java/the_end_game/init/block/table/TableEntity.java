@@ -15,22 +15,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.BedItem;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.BrushItem;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ElytraItem;
-import net.minecraft.world.item.FishingRodItem;
-import net.minecraft.world.item.FlintAndSteelItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.MaceItem;
-import net.minecraft.world.item.ShieldItem;
-import net.minecraft.world.item.SpyglassItem;
-import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -273,16 +258,16 @@ public class TableEntity extends GCmaBlockEntity {
     private static boolean isToolOrWeapon(ItemStack stack) {
         return stack.is(ItemTags.SWORDS) || stack.is(ItemTags.AXES) || stack.is(ItemTags.PICKAXES) || stack.is(ItemTags.SHOVELS) || stack.is(ItemTags.HOES)
                 || stack.is(ItemTags.BOW_ENCHANTABLE) || stack.is(ItemTags.CROSSBOW_ENCHANTABLE) || stack.is(ItemTags.TRIDENT_ENCHANTABLE)
-                || stack.is(Items.SHEARS) || stack.is(Items.MACE) || stack.is(Items.BRUSH) || stack.is(Items.FLINT_AND_STEEL)
-                || stack.is(Items.FISHING_ROD) || stack.is(Items.SPYGLASS)
+                || stack.is(Items.SHEARS) || stack.is(Items.MACE) || stack.is(Items.BRUSH) || stack.is(Items.FLINT_AND_STEEL) || stack.is(Items.SPYGLASS)
+                || stack.is(Items.FISHING_ROD) || stack.is(Items.CARROT_ON_A_STICK) || stack.is(Items.WARPED_FUNGUS_ON_A_STICK)
                 || stack.getItem() instanceof BowItem || stack.getItem() instanceof CrossbowItem || stack.getItem() instanceof TridentItem
                 || stack.getItem() instanceof ShieldItem || stack.getItem() instanceof MaceItem || stack.getItem() instanceof BrushItem
-                || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof SpyglassItem;
+                || stack.getItem() instanceof FlintAndSteelItem || stack.getItem() instanceof SpyglassItem
+                || stack.getItem() instanceof FishingRodItem || stack.getItem() instanceof FoodOnAStickItem;
+
     }
 
-    private static float yawForSide(Direction side) {
-        return (float) Math.toDegrees(Math.atan2(side.getStepX(), side.getStepZ()));
-    }
+    private static float yawForSide(Direction side) { return (float) Math.toDegrees(Math.atan2(side.getStepX(), side.getStepZ())); }
 
     private static float snapYaw(float yaw) {
         float snapped = Math.round(yaw / 45.0F) * 45.0F;

@@ -19,6 +19,12 @@ public class InitCreativeTabs {
                     .displayItems(((itemDisplayParameters, output) -> {
                         output.accept(InitItem.ETERICON_WET);
                         output.accept(InitItem.ETERICON);
+
+                        //=============[Item]=============
+                        output.accept(InitItem.INKWELL);
+                        output.accept(InitItem.WRITING_FEATHER);
+
+                        //=============[Block]=============
                         output.accept(InitBlock.TABLE);
                     })).build());
 

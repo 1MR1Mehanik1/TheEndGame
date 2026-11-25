@@ -17,13 +17,19 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.WoolCarpetBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -37,29 +43,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class Table extends GCmaBlock {
+public class Table extends GCmaBlock implements SimpleWaterloggedBlock {
     public static final IntegerProperty ROTATION = IntegerProperty.create("rotation", 0, 7);
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final VoxelShape TOP = Shapes.or(
             Block.box(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D),
             Block.box(1.0D, 11.0D, 1.0D, 15.0D, 12.0D, 15.0D)
     );
-    private static final VoxelShape LEG_SE = Shapes.or(
-            Block.box(10.5D, 2.0D, 10.5D, 13.5D, 12.0D, 13.5D),
-            Block.box(10.0D, 0.0D, 10.0D, 14.0D, 2.0D, 14.0D)
-    );
-    private static final VoxelShape LEG_NE = Shapes.or(
-            Block.box(10.5D, 2.0D, 2.5D, 13.5D, 12.0D, 5.5D),
-            Block.box(10.0D, 0.0D, 2.0D, 14.0D, 2.0D, 6.0D)
-    );
-    private static final VoxelShape LEG_SW = Shapes.or(
-            Block.box(2.5D, 2.0D, 10.5D, 5.5D, 12.0D, 13.5D),
-            Block.box(2.0D, 0.0D, 10.0D, 6.0D, 2.0D, 14.0D)
-    );
-    private static final VoxelShape LEG_NW = Shapes.or(
-            Block.box(2.5D, 2.0D, 2.5D, 5.5D, 12.0D, 5.5D),
-            Block.box(2.0D, 0.0D, 2.0D, 6.0D, 2.0D, 6.0D)
-    );
+    private static final VoxelShape LEG_SE = Shapes.or(Block.box(10.5D, 0.0D, 10.5D, 13.5D, 12.0D, 13.5D));
+    private static final VoxelShape LEG_NE = Shapes.or(Block.box(10.5D, 0.0D, 2.5D, 13.5D, 12.0D, 5.5D));
+    private static final VoxelShape LEG_SW = Shapes.or(Block.box(2.5D, 0.0D, 10.5D, 5.5D, 12.0D, 13.5D));
+    private static final VoxelShape LEG_NW = Shapes.or(Block.box(2.5D, 0.0D, 2.5D, 5.5D, 12.0D, 5.5D));
     private static final VoxelShape[] SHAPES = new VoxelShape[16];
 
     static {
@@ -79,21 +74,30 @@ public class Table extends GCmaBlock {
 
     public Table(Properties properties, Supplier<? extends BlockEntityType<?>> type, ResourceLocation model, ResourceLocation texture) {
         super(properties, type, model, texture);
+        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, Boolean.valueOf(false)));
     }
 
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(ROTATION);
+        builder.add(ROTATION).add(WATERLOGGED);
     }
+
+    @Override protected FluidState getFluidState(BlockState state) { return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state); }
 
     @Override public BlockState getStateForPlacement(BlockPlaceContext context) {
         int rotation = context.getPlayer() == null ? 0 : Math.floorMod(Math.round((context.getPlayer().getYRot() + 180.0F) / 45.0F), 8);
-        return this.defaultBlockState().setValue(ROTATION, rotation);
+        boolean waterlogged = context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER);
+        return this.defaultBlockState().setValue(ROTATION, rotation).setValue(WATERLOGGED, waterlogged);
     }
 
     @Override public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new TableEntity(getBlockEntityType(), pos, state); }
     @Override public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) { return buildShape(level, pos); }
     @Override public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) { return buildShape(level, pos); }
+
+    @Override protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+        if (state.getValue(WATERLOGGED)) { level.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level)); }
+        return super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+    }
 
     private static VoxelShape buildShape(BlockGetter level, BlockPos pos) {
         int mask = 0;
@@ -117,9 +121,7 @@ public class Table extends GCmaBlock {
             int target = table.findItemAt(hit);
             if (target < 0) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             boolean shift = player.isShiftKeyDown();
-            return take(level, pos, player, target, shift ? 1 : Integer.MAX_VALUE)
-                    ? ItemInteractionResult.sidedSuccess(level.isClientSide)
-                    : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return take(level, pos, player, target, shift ? 1 : Integer.MAX_VALUE) ? ItemInteractionResult.sidedSuccess(level.isClientSide) : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
         if (player.isShiftKeyDown() && hit.getDirection() == Direction.UP && level.getBlockEntity(pos) instanceof TableEntity table) {

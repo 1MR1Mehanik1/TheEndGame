@@ -12,22 +12,20 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import the_end_game.init.InitBlock;
-import the_end_game.init.block.table.TableItemRenderer;
+import the_end_game.init.block.table.*;
+import the_end_game.init.block.table_theories.TableTheoriesItemRenderer;
 
 @Mod(value = Main.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = Main.MOD_ID, value = Dist.CLIENT)
 public class MainClient {
     public MainClient(ModContainer container) {}
 
-    @SubscribeEvent public static void onClientSetup(FMLClientSetupEvent e) {
-        e.enqueueWork(GCApiInitClient::init);
-    }
+    @SubscribeEvent public static void onClientSetup(FMLClientSetupEvent e) { e.enqueueWork(GCApiInitClient::init); }
 
-    @SubscribeEvent public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers e) {
-        InitBlock.regRenderBE(e);
-    }
+    @SubscribeEvent public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers e) { InitBlock.regRenderBE(e); }
 
     @SubscribeEvent public static void onRegisterClientExtensions(RegisterClientExtensionsEvent e) {
         e.registerItem(new IClientItemExtensions() { @Override public BlockEntityWithoutLevelRenderer getCustomRenderer() { return TableItemRenderer.INSTANCE; } }, InitBlock.TABLE.get().asItem());
+        e.registerItem(new IClientItemExtensions() { @Override public BlockEntityWithoutLevelRenderer getCustomRenderer() { return TableTheoriesItemRenderer.INSTANCE; } }, InitBlock.TABLE_THEORIES.get().asItem());
     }
 }

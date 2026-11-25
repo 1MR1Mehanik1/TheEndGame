@@ -1,9 +1,17 @@
 {
   "creative_tab.the_end_game": "The End Game",
 
+
   "item.the_end_game.etericon_wet": "Поврежденная мокрая книга",
   "item.the_end_game.etericon": "Этерикон",
-  "item.the_end_game.etericon.tooltip": "Большая часть надписей не разборчива...",
+  "item.the_end_game.etericon.info": "§7Большая часть надписей не разборчива...",
+
+  "item.the_end_game.inkwell": "Чернильница",
+  "item.the_end_game.inkwell.ink": "Чернила: %s / %s",
+  "item.the_end_game.writing_feather": "Письменное перо",
+
+
+  "block.the_end_game.table": "Стол",
 
 
   "gui.the_end_game.crafting.below.missing": "Не хватает блока под верстаком: %s",

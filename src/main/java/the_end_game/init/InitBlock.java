@@ -15,9 +15,8 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import the_end_game.Main;
-import the_end_game.init.block.table.Table;
-import the_end_game.init.block.table.TableEntity;
-import the_end_game.init.block.table.TableRenderer;
+import the_end_game.init.block.table.*;
+import the_end_game.init.block.table_theories.*;
 
 import java.util.function.Supplier;
 
@@ -33,9 +32,18 @@ public class InitBlock {
     private static BlockEntityType<TableEntity> createTableBE() { return BlockEntityType.Builder.of((pos, state) -> new TableEntity(TABLE_BE.get(), pos, state), TABLE.get()).build(null); }
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TableEntity>> TABLE_BE = BLOCK_ENTITIES.register("table", InitBlock::createTableBE);
 
+    public static final DeferredBlock<TableTheories> TABLE_THEORIES = registerBlock("table_theories", () -> new TableTheories(
+            BlockBehaviour.Properties.of().strength(3.0F, 3.0F).noOcclusion().sound(SoundType.WOOD).dynamicShape(),
+            InitBlock.TABLE_THEORIES_BE,
+            ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "models/block/table_theories.geo.json"),
+            ResourceLocation.fromNamespaceAndPath(Main.MOD_ID, "textures/block/table_theories.png")));
+    private static BlockEntityType<TableTheoriesEntity> createTableTheoriesBE() { return BlockEntityType.Builder.of((pos, state) -> new TableTheoriesEntity(TABLE_THEORIES_BE.get(), pos, state), TABLE_THEORIES.get()).build(null); }
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TableTheoriesEntity>> TABLE_THEORIES_BE = BLOCK_ENTITIES.register("table_theories", InitBlock::createTableTheoriesBE);
+
 
     public static void regRenderBE(EntityRenderersEvent.RegisterRenderers e) {
         e.registerBlockEntityRenderer(TABLE_BE.get(), TableRenderer::new);
+        e.registerBlockEntityRenderer(TABLE_THEORIES_BE.get(), TableTheoriesRenderer::new);
     }
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> regBlockReturn = BLOCKS.register(name, block);

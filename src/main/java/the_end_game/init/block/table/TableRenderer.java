@@ -39,9 +39,7 @@ public class TableRenderer extends GeoBlockRenderer {
     private static final Map<BakedModel, Float> MODEL_MIN_Y = new IdentityHashMap<>();
     @Nullable private GeoBone clothBone;
 
-    public TableRenderer(BlockEntityRendererProvider.Context context) {
-        super(context);
-    }
+    public TableRenderer(BlockEntityRendererProvider.Context context) { super(context); }
 
     @Override protected void preRender(GeoModel model, GCmaBlockEntity blockEntity, float partialTick, PoseStack poseStack) {
         GeoBone cloth = model.getBone("Cloth").orElse(null);
@@ -133,6 +131,7 @@ public class TableRenderer extends GeoBlockRenderer {
         boolean south = level.getBlockState(pos.south()).getBlock() instanceof Table;
         boolean east = level.getBlockState(pos.east()).getBlock() instanceof Table;
         boolean west = level.getBlockState(pos.west()).getBlock() instanceof Table;
+
         setHidden(model, "leg_lb", east || south);
         setHidden(model, "leg_lf", east || north);
         setHidden(model, "leg_rb", west || south);
@@ -141,11 +140,34 @@ public class TableRenderer extends GeoBlockRenderer {
         setHidden(model, "w_cloth", west);
         setHidden(model, "n_cloth", north);
         setHidden(model, "s_cloth", south);
+
         GeoBone top = model.getBone("up_cloth").orElse(null);
-        if (top != null) {
-            top.setScaleX(east || west ? 16.0F / 16.2F : 1.0F);
-            top.setScaleZ(north || south ? 16.0F / 16.2F : 1.0F);
+        GeoBone eCloth = model.getBone("e_cloth").orElse(null);
+        GeoBone wCloth = model.getBone("w_cloth").orElse(null);
+        GeoBone nCloth = model.getBone("n_cloth").orElse(null);
+        GeoBone sCloth = model.getBone("s_cloth").orElse(null);
+        if (top == null || eCloth == null || wCloth == null || nCloth == null || sCloth == null) return;
+
+        boolean xConnected = east || west;
+        boolean zConnected = north || south;
+        float xScale = xConnected ? 16.0F / 16.2F : 1.0F;
+        float zScale = zConnected ? 16.0F / 16.2F : 1.0F;
+        float yOffset = 0.01F;
+
+        for (GeoBone bone : new GeoBone[]{top, eCloth, wCloth, nCloth, sCloth}) {
+            bone.setScaleX(xScale);
+            bone.setScaleZ(zScale);
         }
+
+        eCloth.setPositionX(xConnected ? -0.09F : 0.0F);
+        wCloth.setPositionX(xConnected ?  0.09F : 0.0F);
+        eCloth.setPositionY(xConnected ? yOffset : 0.0F);
+        wCloth.setPositionY(xConnected ? yOffset : 0.0F);
+
+        nCloth.setPositionZ(zConnected ?  0.09F : 0.0F);
+        sCloth.setPositionZ(zConnected ? -0.09F : 0.0F);
+        nCloth.setPositionY(zConnected ? yOffset : 0.0F);
+        sCloth.setPositionY(zConnected ? yOffset : 0.0F);
     }
 
     private static void setHidden(GeoModel model, String name, boolean hidden) { model.getBone(name).ifPresent(bone -> bone.isHidden = hidden); }

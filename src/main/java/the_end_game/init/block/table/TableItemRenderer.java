@@ -28,13 +28,7 @@ public class TableItemRenderer extends BlockEntityWithoutLevelRenderer {
         if (model == null || texture == null) return;
 
         GeoModel copy = model.makeCopy();
-        for (String name : new String[]{"leg_lb", "leg_lf", "leg_rb", "leg_rf", "e_cloth", "w_cloth", "n_cloth", "s_cloth"}) {
-            copy.getBone(name).ifPresent(bone -> bone.isHidden = false);
-        }
-        copy.getBone("up_cloth").ifPresent(bone -> {
-            bone.setScaleX(1.0F);
-            bone.setScaleZ(1.0F);
-        });
+        for (String name : new String[]{"leg_lb", "leg_lf", "leg_rb", "leg_rf"}) { copy.getBone(name).ifPresent(bone -> bone.isHidden = false); }
         copy.getBone("Cloth").ifPresent(bone -> {
             bone.isHidden = true;
             bone.hideChildBonesToo = true;

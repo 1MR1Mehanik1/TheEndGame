@@ -42,7 +42,11 @@ displayName="${mod_name}" #mandatory
 #credits="" #optional
 
 # The authors of the mod, displayed in the mod UI (optional)
-authors="MRMehanik_ & Shadow & Pikachy - Authors and creators of the mod"
+authors = """
+
+MRMehanik_ & Shadow & Pikachy - Authors and creators of the mod
+IronLP93 & lronLP93 - Сreators of 3D models
+"""
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
