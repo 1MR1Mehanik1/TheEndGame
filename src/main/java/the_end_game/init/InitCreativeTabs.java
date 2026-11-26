@@ -23,6 +23,8 @@ public class InitCreativeTabs {
                         //=============[Item]=============
                         output.accept(InitItem.INKWELL);
                         output.accept(InitItem.WRITING_FEATHER);
+                        output.accept(InitItem.RESEARCH_READY);
+                        output.accept(InitItem.THEORY);
 
                         //=============[Block]=============
                         output.accept(InitBlock.TABLE);

@@ -1,5 +1,12 @@
 {
   "variants": {
-    "": { "model": "the_end_game:block/table_theories" }
+    "facing=north,extension=false": { "model": "the_end_game:block/table_theories" },
+    "facing=north,extension=true": { "model": "the_end_game:block/table_theories" },
+    "facing=east,extension=false": { "model": "the_end_game:block/table_theories" },
+    "facing=east,extension=true": { "model": "the_end_game:block/table_theories" },
+    "facing=south,extension=false": { "model": "the_end_game:block/table_theories" },
+    "facing=south,extension=true": { "model": "the_end_game:block/table_theories" },
+    "facing=west,extension=false": { "model": "the_end_game:block/table_theories" },
+    "facing=west,extension=true": { "model": "the_end_game:block/table_theories" }
   }
 }

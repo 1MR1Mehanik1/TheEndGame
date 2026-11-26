@@ -1,4 +1,8 @@
 {
+  "block.the_end_game.table_theories": "Theories Table",
+  "item.the_end_game.research_ready": "Research Ready",
+  "item.the_end_game.theory": "Theory",
+  "item.the_end_game.theory.id": "Research: %s",
   "gui.the_end_game.crafting.below.missing": "Missing block under the crafting table: %s",
   "gui.the_end_game.crafting.below.missing_state": "Missing block under the crafting table: %s (state: %s)",
   "gui.the_end_game.crafting.below.missing_nbt": "Missing block under the crafting table: %s (NBT)",

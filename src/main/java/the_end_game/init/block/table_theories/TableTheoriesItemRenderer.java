@@ -40,6 +40,14 @@ public class TableTheoriesItemRenderer extends BlockEntityWithoutLevelRenderer {
             bone.isHidden = true;
             bone.hideChildBonesToo = true;
         });
+        copy.getBone("featherontable").ifPresent(bone -> {
+            bone.isHidden = true;
+            bone.hideChildBonesToo = true;
+        });
+        copy.getBone("featherininkwell").ifPresent(bone -> {
+            bone.isHidden = true;
+            bone.hideChildBonesToo = true;
+        });
 
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.0D, 0.5D);

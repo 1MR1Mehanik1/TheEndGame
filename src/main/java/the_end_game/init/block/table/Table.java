@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -38,6 +39,10 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import the_end_game.init.InitBlock;
+import the_end_game.init.InitItem;
+import the_end_game.init.block.table_theories.TableTheories;
+import the_end_game.init.block.table_theories.TableTheoriesEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +120,10 @@ public class Table extends GCmaBlock implements SimpleWaterloggedBlock {
     }
 
     @Override public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (stack.is(ItemTags.AXES)) {
+            if (level.isClientSide) return canTransform(level, pos) ? ItemInteractionResult.SUCCESS : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return transform(level, pos) ? ItemInteractionResult.sidedSuccess(false) : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
         if (stack.isEmpty()) {
             if (hit.getDirection() != Direction.UP) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             if (!(level.getBlockEntity(pos) instanceof TableEntity table)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -182,6 +191,132 @@ public class Table extends GCmaBlock implements SimpleWaterloggedBlock {
         if (target < 0) return InteractionResult.PASS;
         boolean shift = player.isShiftKeyDown();
         return take(level, pos, player, target, shift ? 1 : Integer.MAX_VALUE) ? InteractionResult.sidedSuccess(level.isClientSide) : InteractionResult.PASS;
+    }
+
+    private static boolean canTransform(Level level, BlockPos pos) {
+        BlockPos extensionPos = adjacentTable(level, pos);
+        return extensionPos != null && (hasRequired(level, pos) || hasRequired(level, extensionPos));
+    }
+
+    private static boolean transform(Level level, BlockPos pos) {
+        BlockPos extensionPos = adjacentTable(level, pos);
+        if (extensionPos == null) return false;
+        List<ItemStack> first = drops(level, pos);
+        List<ItemStack> second = drops(level, extensionPos);
+        if (!hasRequired(first) && !hasRequired(second)) return false;
+
+        List<ItemStack> extras = new ArrayList<>();
+        int paper = 0;
+        ItemStack paperStack = ItemStack.EMPTY;
+        ItemStack inkwell = ItemStack.EMPTY;
+        ItemStack feather = ItemStack.EMPTY;
+        for (List<ItemStack> stacks : List.of(first, second)) {
+            for (ItemStack stack : stacks) {
+                if (stack.is(Items.PAPER)) {
+                    if (paperStack.isEmpty()) paperStack = stack.copyWithCount(1);
+                    paper += stack.getCount();
+                } else if (stack.is(InitItem.INKWELL.get())) {
+                    if (inkwell.isEmpty()) inkwell = stack.copyWithCount(1);
+                    else extras.add(stack.copy());
+                } else if (stack.is(InitItem.WRITING_FEATHER.get())) {
+                    if (feather.isEmpty()) feather = stack.copyWithCount(1);
+                    else extras.add(stack.copy());
+                } else {
+                    extras.add(stack.copy());
+                }
+            }
+        }
+
+        Direction extensionDir = directionTo(pos, extensionPos);
+        if (extensionDir == null) return false;
+        Direction facing = facingFor(extensionDir);
+        level.removeBlock(pos, false);
+        level.removeBlock(extensionPos, false);
+        TableTheories block = InitBlock.TABLE_THEORIES.get();
+        BlockState master = block.defaultBlockState().setValue(TableTheories.FACING, facing).setValue(TableTheories.EXTENSION, false);
+        if (!level.setBlock(pos, master, Block.UPDATE_ALL)) {
+            dropAll(level, pos, first);
+            dropAll(level, pos, second);
+            return false;
+        }
+        block.ensureExtension(level, pos, master);
+        level.setBlock(extensionPos, master.setValue(TableTheories.EXTENSION, true), Block.UPDATE_ALL);
+
+        if (!(level.getBlockEntity(pos) instanceof TableTheoriesEntity table)) {
+            if (paper > 0) extras.add(paperStack.copyWithCount(paper));
+            if (!inkwell.isEmpty()) extras.add(inkwell);
+            if (!feather.isEmpty()) extras.add(feather);
+            dropAll(level, pos, extras);
+            return true;
+        }
+
+        if (paper > 0) {
+            int max = Math.max(1, paperStack.getMaxStackSize());
+            int remaining = paper;
+            int[] paperSlots = {0, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+            for (int slot : paperSlots) {
+                if (remaining <= 0) break;
+                int count = Math.min(remaining, max);
+                table.setItem(slot, paperStack.copyWithCount(count));
+                remaining -= count;
+            }
+            if (remaining > 0) extras.add(paperStack.copyWithCount(remaining));
+        }
+        if (!inkwell.isEmpty()) table.setItem(1, inkwell);
+        if (!feather.isEmpty()) table.setItem(2, feather);
+        dropAll(level, pos, extras);
+        return true;
+    }
+
+    private static List<ItemStack> drops(Level level, BlockPos pos) {
+        return level.getBlockEntity(pos) instanceof TableEntity table ? table.getDrops() : List.of();
+    }
+
+    private static boolean hasRequired(Level level, BlockPos pos) {
+        return hasRequired(drops(level, pos));
+    }
+
+    private static boolean hasRequired(List<ItemStack> stacks) {
+        int paper = 0;
+        boolean inkwell = false;
+        boolean feather = false;
+        for (ItemStack stack : stacks) {
+            if (stack.is(Items.PAPER)) paper += stack.getCount();
+            else if (stack.is(InitItem.INKWELL.get())) inkwell = true;
+            else if (stack.is(InitItem.WRITING_FEATHER.get())) feather = true;
+        }
+        return paper > 0 && inkwell && feather;
+    }
+
+    private static BlockPos adjacentTable(Level level, BlockPos pos) {
+        for (Direction direction : new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST}) {
+            BlockPos adjacent = pos.relative(direction);
+            if (level.getBlockState(adjacent).getBlock() instanceof Table) return adjacent;
+        }
+        return null;
+    }
+
+    private static Direction directionTo(BlockPos from, BlockPos to) {
+        for (Direction direction : Direction.values()) {
+            if (from.relative(direction).equals(to)) return direction;
+        }
+        return null;
+    }
+
+    private static Direction facingFor(Direction extensionDir) {
+        return switch (extensionDir) {
+            case NORTH -> Direction.EAST;
+            case EAST -> Direction.SOUTH;
+            case SOUTH -> Direction.WEST;
+            case WEST -> Direction.NORTH;
+            default -> Direction.NORTH;
+        };
+    }
+
+    private static void dropAll(Level level, BlockPos pos, List<ItemStack> stacks) {
+        for (ItemStack stack : stacks) {
+            if (!stack.isEmpty()) Block.popResource(level, pos, stack.copy());
+        }
     }
 
     private static boolean take(Level level, BlockPos pos, Player player, int entry, int amount) {

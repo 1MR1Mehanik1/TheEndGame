@@ -7,6 +7,9 @@ import net.neoforged.neoforge.common.NeoForge;
 import the_end_game.handler.vanilla_3x3.Vanilla3x3Events;
 import the_end_game.init.*;
 import the_end_game.init.block.table.Table;
+import the_end_game.init.block.table_theories.TableTheories;
+import the_end_game.init.research.ResearchInteraction;
+import the_end_game.init.research.Researches;
 
 @Mod(Main.MOD_ID)
 public class Main {
@@ -17,6 +20,8 @@ public class Main {
         InitItem.register(modBus);
         InitEtericon.register(modBus);
         InitBlock.register(modBus);
+        InitMenu.register(modBus);
+        Researches.register();
 
         Vanilla3x3Events.register(modBus);
         addEventBus();
@@ -24,5 +29,8 @@ public class Main {
 
     private static void addEventBus() {
         NeoForge.EVENT_BUS.addListener(Table::onRightClickBlock);
+        NeoForge.EVENT_BUS.addListener(TableTheories::onRightClickBlock);
+        NeoForge.EVENT_BUS.addListener(ResearchInteraction::onRightClickBlock);
+        NeoForge.EVENT_BUS.addListener(ResearchInteraction::onEntityInteract);
     }
 }
