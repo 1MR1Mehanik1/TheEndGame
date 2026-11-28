@@ -32,16 +32,77 @@ public class TableTheoriesScreen extends AbstractContainerScreen<TableTheoriesMe
     private static final int INVENTORY_TEXTURE_WIDTH = 256;
     private static final int INVENTORY_TEXTURE_HEIGHT = 256;
 
+    private float fitScale = 1.0F;
+    private int fitX;
+    private int fitY;
+    private boolean backgroundDrawn;
+
     public TableTheoriesScreen(TableTheoriesMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         this.imageWidth = 209;
         this.imageHeight = INVENTORY_Y + INVENTORY_HEIGHT;
     }
 
+    @Override protected void init() {
+        super.init();
+        float scaleX = (float)(this.width - 8) / this.imageWidth;
+        float scaleY = (float)(this.height - 8) / this.imageHeight;
+        this.fitScale = Math.min(1.0F, Math.min(scaleX, scaleY));
+        this.fitX = Math.round((this.width - this.imageWidth * this.fitScale) / 2.0F);
+        this.fitY = Math.round((this.height - this.imageHeight * this.fitScale) / 2.0F);
+        this.leftPos = 0;
+        this.topPos = 0;
+    }
+
     @Override public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        int guiMouseX = this.toGuiX(mouseX);
+        int guiMouseY = this.toGuiY(mouseY);
+        this.renderTransparentBackground(graphics);
+        this.backgroundDrawn = true;
+        graphics.pose().pushPose();
+        graphics.pose().translate(this.fitX, this.fitY, 0);
+        graphics.pose().scale(this.fitScale, this.fitScale, 1);
         super.render(graphics, mouseX, mouseY, partialTick);
+        graphics.pose().popPose();
+        this.backgroundDrawn = false;
         this.renderTooltip(graphics, mouseX, mouseY);
-        this.renderGhostTooltip(graphics, mouseX, mouseY);
+        this.renderGhostTooltip(graphics, guiMouseX, guiMouseY, mouseX, mouseY);
+    }
+
+    @Override public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        if (this.backgroundDrawn) {
+            this.renderBg(graphics, partialTick, mouseX, mouseY);
+            return;
+        }
+        super.renderBackground(graphics, mouseX, mouseY, partialTick);
+    }
+
+    private int toGuiX(double screenX) {
+        return (int)Math.floor((screenX - this.fitX) / this.fitScale);
+    }
+
+    private int toGuiY(double screenY) {
+        return (int)Math.floor((screenY - this.fitY) / this.fitScale);
+    }
+
+    @Override protected boolean isHovering(int x, int y, int width, int height, double mouseX, double mouseY) {
+        return this.isGuiHovering(x, y, width, height, this.toGuiX(mouseX), this.toGuiY(mouseY));
+    }
+
+    private boolean isGuiHovering(int x, int y, int width, int height, int mouseX, int mouseY) {
+        return mouseX >= x - 1 && mouseX < x + width + 1 && mouseY >= y - 1 && mouseY < y + height + 1;
+    }
+
+    @Override public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return super.mouseClicked(this.toGuiX(mouseX), this.toGuiY(mouseY), button);
+    }
+
+    @Override public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        return super.mouseReleased(this.toGuiX(mouseX), this.toGuiY(mouseY), button);
+    }
+
+    @Override public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        return super.mouseDragged(this.toGuiX(mouseX), this.toGuiY(mouseY), button, dragX / this.fitScale, dragY / this.fitScale);
     }
 
     @Override protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -79,11 +140,11 @@ public class TableTheoriesScreen extends AbstractContainerScreen<TableTheoriesMe
         renderGhost(graphics, 2, new ItemStack(InitItem.WRITING_FEATHER.get()));
     }
 
-    private void renderGhostTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+    private void renderGhostTooltip(GuiGraphics graphics, int guiMouseX, int guiMouseY, int mouseX, int mouseY) {
         if (!this.menu.getCarried().isEmpty()) return;
         for (int slot = 0; slot < 3; slot++) {
             if (!this.menu.slots.get(slot).getItem().isEmpty()) continue;
-            if (!this.isHovering(this.menu.slots.get(slot).x, this.menu.slots.get(slot).y, 16, 16, mouseX, mouseY)) continue;
+            if (!this.isGuiHovering(this.menu.slots.get(slot).x, this.menu.slots.get(slot).y, 16, 16, guiMouseX, guiMouseY)) continue;
             ItemStack stack = switch (slot) {
                 case 0 -> new ItemStack(Items.PAPER);
                 case 1 -> new ItemStack(InitItem.INKWELL.get());

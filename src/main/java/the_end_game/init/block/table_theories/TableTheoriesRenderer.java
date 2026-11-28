@@ -9,12 +9,14 @@ import gcapi_model_animation.init.basic.GCmaBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import the_end_game.init.InitItem;
 
 public class TableTheoriesRenderer extends GeoBlockRenderer {
@@ -32,6 +34,14 @@ public class TableTheoriesRenderer extends GeoBlockRenderer {
 
     public TableTheoriesRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
+    }
+
+    @Override public AABB getRenderBoundingBox(GCmaBlockEntity be) {
+        if (be.getBlockState().getBlock() instanceof TableTheories) {
+            BlockPos extension = be.getBlockPos().relative(be.getBlockState().getValue(TableTheories.FACING).getCounterClockWise());
+            return AABB.encapsulatingFullBlocks(be.getBlockPos(), extension).inflate(0.5D);
+        }
+        return super.getRenderBoundingBox(be);
     }
 
     @Override protected void preRender(GeoModel model, GCmaBlockEntity blockEntity, float partialTick, PoseStack poseStack) {
