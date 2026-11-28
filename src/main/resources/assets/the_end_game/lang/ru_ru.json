@@ -7,6 +7,7 @@
   "item.the_end_game.etericon.info": "§7Большая часть надписей не разборчива...",
 
   "item.the_end_game.inkwell": "Чернильница",
+  "item.the_end_game.inkwell.ink": "Чернила: %s / %s",
   "item.the_end_game.writing_feather": "Письменное перо",
   "item.the_end_game.research_ready": "Готовое исследование",
   "item.the_end_game.theory": "Теория",
