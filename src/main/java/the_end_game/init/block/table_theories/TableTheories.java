@@ -8,11 +8,14 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -23,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -38,9 +42,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class TableTheories extends GCmaBlock {
+public class TableTheories extends GCmaBlock implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty EXTENSION = BooleanProperty.create("extension");
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape FULL_NORTH = Shapes.or(
             Shapes.box(-1.0D, 0.875D, 0.0D, 1.0D, 1.0D, 1.0D),
             Shapes.box(-0.9375D, 0.8125D, 0.0625D, 0.9375D, 0.875D, 0.9375D),
@@ -64,18 +69,18 @@ public class TableTheories extends GCmaBlock {
 
     public TableTheories(Properties properties, Supplier<? extends BlockEntityType<?>> type, ResourceLocation model, ResourceLocation texture) {
         super(properties, type, model, texture);
-        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(EXTENSION, false));
+        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(EXTENSION, false).setValue(WATERLOGGED, false));
     }
 
     @Override protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, EXTENSION);
+        builder.add(FACING, EXTENSION, WATERLOGGED);
     }
 
     @Override public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction facing = context.getHorizontalDirection().getOpposite();
         BlockPos extensionPos = context.getClickedPos().relative(facing.getCounterClockWise());
         if (!context.getLevel().getBlockState(extensionPos).canBeReplaced(context)) return null;
-        return defaultBlockState().setValue(FACING, facing).setValue(EXTENSION, false);
+        return defaultBlockState().setValue(FACING, facing).setValue(EXTENSION, false).setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER));
     }
 
     public static VoxelShape tableShape(Direction facing) {
@@ -166,6 +171,15 @@ public class TableTheories extends GCmaBlock {
 
     @Override public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return state.getValue(EXTENSION) ? Shapes.empty() : getShape(state, level, pos, context);
+    }
+
+    @Override public FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+        if (state.getValue(WATERLOGGED)) level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 
     @Override public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {

@@ -119,8 +119,34 @@
 					]
 				},
 				{
+					"name": "featherontable",
+					"parent": "TableTheories",
+					"pivot": [10, 16.1, 3.25],
+					"cubes": [
+						{
+							"origin": [8.5, 14.1, 3.25],
+							"size": [3, 4, 0],
+							"pivot": [10, 16.1, 3.25],
+							"rotation": [-90, -7.5, 0],
+							"uv": {
+								"north": {"uv": [120, 0], "uv_size": [8, 8]},
+								"east": {"uv": [120, 0], "uv_size": [8, 8]},
+								"south": {"uv": [128, 0], "uv_size": [-8, 8]},
+								"west": {"uv": [120, 0], "uv_size": [8, 8]},
+								"up": {"uv": [128, 8], "uv_size": [-8, -8]},
+								"down": {"uv": [128, 8], "uv_size": [-8, -8]}
+							}
+						}
+					]
+				},
+				{
 					"name": "paper_researches",
 					"parent": "TableTheories",
+					"pivot": [18, 16.05, 0]
+				},
+				{
+					"name": "theory",
+					"parent": "paper_researches",
 					"pivot": [18, 16.05, 0],
 					"cubes": [
 						{
@@ -161,6 +187,25 @@
 								"west": {"uv": [36.5, 82.5], "uv_size": [1, 0]},
 								"up": {"uv": [18, 107.5], "uv_size": [-18, -1]},
 								"down": {"uv": [36, 107.5], "uv_size": [-18, -1]}
+							}
+						}
+					]
+				},
+				{
+					"name": "ready",
+					"parent": "paper_researches",
+					"pivot": [18, 16.55, -0.5],
+					"cubes": [
+						{
+							"origin": [13.5, 16.05, -1],
+							"size": [9, 1, 1],
+							"uv": {
+								"north": {"uv": [0, 82.5], "uv_size": [18, 2.5]},
+								"east": {"uv": [36.5, 83], "uv_size": [5, 5]},
+								"south": {"uv": [0, 82.5], "uv_size": [18, 2.5]},
+								"west": {"uv": [36.5, 83], "uv_size": [5, 5]},
+								"up": {"uv": [18, 85], "uv_size": [-18, -2.5]},
+								"down": {"uv": [18, 85], "uv_size": [-18, -2.5]}
 							}
 						}
 					]
@@ -703,27 +748,6 @@
 								"west": {"uv": [54, 54], "uv_size": [7, 2]},
 								"up": {"uv": [57, 21], "uv_size": [-2, -7]},
 								"down": {"uv": [49, 62], "uv_size": [-2, -7]}
-							}
-						}
-					]
-				},
-				{
-					"name": "featherontable",
-					"parent": "TableTheories",
-					"pivot": [10, 16.1, 3.25],
-					"cubes": [
-						{
-							"origin": [8.5, 14.1, 3.25],
-							"size": [3, 4, 0],
-							"pivot": [10, 16.1, 3.25],
-							"rotation": [-90, -7.5, 0],
-							"uv": {
-								"north": {"uv": [120, 0], "uv_size": [8, 8]},
-								"east": {"uv": [120, 0], "uv_size": [8, 8]},
-								"south": {"uv": [128, 0], "uv_size": [-8, 8]},
-								"west": {"uv": [120, 0], "uv_size": [8, 8]},
-								"up": {"uv": [128, 8], "uv_size": [-8, -8]},
-								"down": {"uv": [128, 8], "uv_size": [-8, -8]}
 							}
 						}
 					]

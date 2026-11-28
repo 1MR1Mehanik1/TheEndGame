@@ -41,21 +41,22 @@ public class TableTheoriesRenderer extends GeoBlockRenderer {
         boolean feather = false;
         boolean theory = false;
         if (blockEntity instanceof TableTheoriesEntity table) {
-            for (ItemStack stack : table.getItems()) {
-                if (stack.is(Items.PAPER)) {
+            for (int slot = 0; slot < TableTheoriesEntity.SLOTS; slot++) {
+                ItemStack stack = table.getItem(slot);
+                if (slot == 0 && stack.is(Items.PAPER)) {
                     paper = true;
                     paperCount += stack.getCount();
                 }
-                if (stack.is(InitItem.INKWELL.get())) inkwell = true;
-                if (stack.is(InitItem.WRITING_FEATHER.get())) feather = true;
-                if (stack.is(InitItem.THEORY.get())) theory = true;
+                if (slot == 1 && stack.is(InitItem.INKWELL.get())) inkwell = true;
+                if (slot == 2 && stack.is(InitItem.WRITING_FEATHER.get())) feather = true;
+                if (slot == 3 && stack.is(InitItem.THEORY.get())) theory = true;
             }
         }
 
         setBone(model, "paper", paper);
-        setBone(model, "leaf_1", paperCount >= 1 && paperCount <= 3);
-        setBone(model, "leaf_4", paperCount >= 4 && paperCount <= 7);
-        setBone(model, "leaf_8", paperCount >= 8 && paperCount <= 15);
+        setBone(model, "leaf_1", paperCount >= 1);
+        setBone(model, "leaf_4", paperCount >= 4);
+        setBone(model, "leaf_8", paperCount >= 8);
         setBone(model, "leaf_16", paperCount >= 16);
         setBone(model, "paper_researches", theory);
         setBone(model, "inkwell", inkwell);

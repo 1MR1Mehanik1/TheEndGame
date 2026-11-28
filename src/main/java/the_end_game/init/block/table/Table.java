@@ -120,9 +120,9 @@ public class Table extends GCmaBlock implements SimpleWaterloggedBlock {
     }
 
     @Override public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (stack.is(ItemTags.AXES)) {
-            if (level.isClientSide) return canTransform(level, pos) ? ItemInteractionResult.SUCCESS : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-            return transform(level, pos) ? ItemInteractionResult.sidedSuccess(false) : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (stack.is(ItemTags.AXES) && player.isShiftKeyDown() && canTransform(level, pos)) {
+            if (level.isClientSide) return ItemInteractionResult.SUCCESS;
+            if (transform(level, pos, player)) return ItemInteractionResult.sidedSuccess(false);
         }
         if (stack.isEmpty()) {
             if (hit.getDirection() != Direction.UP) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -198,12 +198,18 @@ public class Table extends GCmaBlock implements SimpleWaterloggedBlock {
         return extensionPos != null && (hasRequired(level, pos) || hasRequired(level, extensionPos));
     }
 
-    private static boolean transform(Level level, BlockPos pos) {
-        BlockPos extensionPos = adjacentTable(level, pos);
-        if (extensionPos == null) return false;
+    private static boolean transform(Level level, BlockPos pos, Player player) {
+        BlockPos adjacentPos = adjacentTable(level, pos);
+        if (adjacentPos == null) return false;
         List<ItemStack> first = drops(level, pos);
-        List<ItemStack> second = drops(level, extensionPos);
-        if (!hasRequired(first) && !hasRequired(second)) return false;
+        List<ItemStack> second = drops(level, adjacentPos);
+        boolean firstRequired = hasRequired(first);
+        boolean secondRequired = hasRequired(second);
+        if (!firstRequired && !secondRequired) return false;
+
+        Direction desired = player.getDirection().getOpposite();
+        BlockPos masterPos = chooseMaster(pos, adjacentPos, desired, firstRequired);
+        BlockPos extensionPos = masterPos.equals(pos) ? adjacentPos : pos;
 
         List<ItemStack> extras = new ArrayList<>();
         int paper = 0;
@@ -227,26 +233,26 @@ public class Table extends GCmaBlock implements SimpleWaterloggedBlock {
             }
         }
 
-        Direction extensionDir = directionTo(pos, extensionPos);
+        Direction extensionDir = directionTo(masterPos, extensionPos);
         if (extensionDir == null) return false;
         Direction facing = facingFor(extensionDir);
-        level.removeBlock(pos, false);
+        level.removeBlock(masterPos, false);
         level.removeBlock(extensionPos, false);
         TableTheories block = InitBlock.TABLE_THEORIES.get();
         BlockState master = block.defaultBlockState().setValue(TableTheories.FACING, facing).setValue(TableTheories.EXTENSION, false);
-        if (!level.setBlock(pos, master, Block.UPDATE_ALL)) {
-            dropAll(level, pos, first);
-            dropAll(level, pos, second);
+        if (!level.setBlock(masterPos, master, Block.UPDATE_ALL)) {
+            dropAll(level, masterPos, first);
+            dropAll(level, masterPos, second);
             return false;
         }
-        block.ensureExtension(level, pos, master);
+        block.ensureExtension(level, masterPos, master);
         level.setBlock(extensionPos, master.setValue(TableTheories.EXTENSION, true), Block.UPDATE_ALL);
 
-        if (!(level.getBlockEntity(pos) instanceof TableTheoriesEntity table)) {
+        if (!(level.getBlockEntity(masterPos) instanceof TableTheoriesEntity table)) {
             if (paper > 0) extras.add(paperStack.copyWithCount(paper));
             if (!inkwell.isEmpty()) extras.add(inkwell);
             if (!feather.isEmpty()) extras.add(feather);
-            dropAll(level, pos, extras);
+            dropAll(level, masterPos, extras);
             return true;
         }
 
@@ -264,7 +270,7 @@ public class Table extends GCmaBlock implements SimpleWaterloggedBlock {
         }
         if (!inkwell.isEmpty()) table.setItem(1, inkwell);
         if (!feather.isEmpty()) table.setItem(2, feather);
-        dropAll(level, pos, extras);
+        dropAll(level, masterPos, extras);
         return true;
     }
 
@@ -286,6 +292,19 @@ public class Table extends GCmaBlock implements SimpleWaterloggedBlock {
             else if (stack.is(InitItem.WRITING_FEATHER.get())) feather = true;
         }
         return paper > 0 && inkwell && feather;
+    }
+
+    private static BlockPos chooseMaster(BlockPos clicked, BlockPos adjacent, Direction desired, boolean clickedHasRequired) {
+        Direction clickedFacing = facingFor(directionTo(clicked, adjacent));
+        Direction adjacentFacing = facingFor(directionTo(adjacent, clicked));
+        int clickedScore = facingScore(clickedFacing, desired);
+        int adjacentScore = facingScore(adjacentFacing, desired);
+        if (clickedScore == adjacentScore) return clickedHasRequired ? clicked : adjacent;
+        return clickedScore > adjacentScore ? clicked : adjacent;
+    }
+
+    private static int facingScore(Direction facing, Direction desired) {
+        return facing.getStepX() * desired.getStepX() + facing.getStepZ() * desired.getStepZ();
     }
 
     private static BlockPos adjacentTable(Level level, BlockPos pos) {

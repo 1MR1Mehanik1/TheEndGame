@@ -38,6 +38,12 @@ public class TableTheoriesScreen extends AbstractContainerScreen<TableTheoriesMe
         this.imageHeight = INVENTORY_Y + INVENTORY_HEIGHT;
     }
 
+    @Override public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
+        this.renderTooltip(graphics, mouseX, mouseY);
+        this.renderGhostTooltip(graphics, mouseX, mouseY);
+    }
+
     @Override protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }
 
@@ -71,6 +77,21 @@ public class TableTheoriesScreen extends AbstractContainerScreen<TableTheoriesMe
         renderGhost(graphics, 0, new ItemStack(Items.PAPER));
         renderGhost(graphics, 1, new ItemStack(InitItem.INKWELL.get()));
         renderGhost(graphics, 2, new ItemStack(InitItem.WRITING_FEATHER.get()));
+    }
+
+    private void renderGhostTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        if (!this.menu.getCarried().isEmpty()) return;
+        for (int slot = 0; slot < 3; slot++) {
+            if (!this.menu.slots.get(slot).getItem().isEmpty()) continue;
+            if (!this.isHovering(this.menu.slots.get(slot).x, this.menu.slots.get(slot).y, 16, 16, mouseX, mouseY)) continue;
+            ItemStack stack = switch (slot) {
+                case 0 -> new ItemStack(Items.PAPER);
+                case 1 -> new ItemStack(InitItem.INKWELL.get());
+                default -> new ItemStack(InitItem.WRITING_FEATHER.get());
+            };
+            graphics.renderTooltip(this.font, stack, mouseX, mouseY);
+            return;
+        }
     }
 
     private void renderGhost(GuiGraphics graphics, int slot, ItemStack stack) {
